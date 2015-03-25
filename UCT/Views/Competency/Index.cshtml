@@ -1,0 +1,639 @@
+﻿@model UCT.ViewModels.CompetencyHierarchyViewModel
+
+@{
+    ViewBag.Title = "Competencies";
+}
+@Styles.Render("~/Content/themes/base/css")
+<h2>Competencies</h2>
+@if (Model.UserPrograms.Count() > 0)
+{
+    using (Html.BeginForm("Index", "Competency", FormMethod.Post, new { programID = Model.ProgramID }))
+    {
+        <div style="float:left;">
+            <label style="display:inline;padding-right:15px;">Select Program:</label>@Html.DropDownListFor(x => x.ProgramID, new SelectList(Model.UserPrograms, "ProgramID", "Description", Model.ProgramID))
+            <input id="submit" type="submit" name="Submit" value="Apply" style="margin-left:15px;" />
+        </div>
+    }
+    <div style="clear:both"></div>
+    <div>
+        <div style="float:left;padding-top:10px;">
+            <a href="#" id="createLearningGoal">Create New Learning Goal</a>
+            <a href="#" id="createCompetency">Create New Competency</a>
+            <a href="#" id="createDescriptor">Create New Descriptor</a>
+        </div>
+        <div style="float:right;">
+            <input type="button" value="Export" onclick="location.href='@Url.Action("Export", "Competency", new { programID = Model.ProgramID })'" />
+        </div>
+    </div>
+    <div style="clear:both;"></div>
+    
+    if (Model.LearningGoals.Count() > 0)
+    {
+        <table id="competencyHierarchyTable">
+            <thead>
+                <tr>
+                    <th colspan="4">
+                        Goals, Competencies, and Descriptors &nbsp; &nbsp;<a href="#" id="toggleSchoolGoals">Show School Learning Goals</a>
+                    </th>
+                    <th style="text-align:center;">Actions</th>
+                </tr>
+            </thead>
+            @foreach (var schoolLearningGoal in Model.SchoolLearningGoals)
+            {
+                <tr style="display:none;" data-tag="school">
+                    <td class="width30">@Html.DisplayFor(modelItem => schoolLearningGoal.LearningGoalNumber)</td>
+                    <td colspan="3">
+                        <b>@Html.DisplayFor(modelItem => schoolLearningGoal.Title)</b>:&nbsp;@Html.DisplayFor(modelItem => schoolLearningGoal.Description)
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+                foreach (var schoolCompetency in schoolLearningGoal.Competencies.OrderBy(c => c.Position))
+                {
+                    <tr style="display:none;" data-tag="school">
+                        <td class="width30">&nbsp;</td>
+                        <td class="width30">@Html.DisplayFor(modelItem => schoolCompetency.CompetencyNumber)</td>
+                        <td colspan="2">@Html.DisplayFor(modelItem => schoolCompetency.Description)</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    foreach (var schoolDescriptor in schoolCompetency.Descriptors.OrderBy(d => d.Position))
+                    {
+                        <tr style="display:none;" data-tag="school">
+                            <td class="width30">&nbsp;</td>
+                            <td class="width30">&nbsp;</td>
+                            <td class="width30">@Html.DisplayFor(modelItem => schoolDescriptor.DescriptorNumber)</td>
+                            <td>@Html.DisplayFor(modelItem => schoolDescriptor.Description)</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    }
+                }
+            }
+
+            @foreach (var learningGoal in Model.LearningGoals)
+            {
+                <tr>
+                    <td class="width30">@Html.DisplayFor(modelItem => learningGoal.LearningGoalNumber)</td>
+                    <td colspan="3"><b>@Html.DisplayFor(modelItem => learningGoal.Title)</b>:&nbsp;@Html.DisplayFor(modelItem => learningGoal.Description)</td>
+                    <td class="nowrap">
+                        <a href="#" id="edit-@learningGoal.LearningGoalID" class="editLearningGoal">Edit</a> |
+                        <a href="#" id="delete-@learningGoal.LearningGoalID" class="deleteLearningGoal" data-itemname="@learningGoal.LearningGoalNumber @learningGoal.Title">Delete</a> |
+                        <a href="#" id="moveUp-@string.Format("{0}-{1}", learningGoal.LearningGoalID, learningGoal.Position - 1)" class="moveUpLearningGoal">Up</a> |
+                        <a href="#" id="moveDown-@string.Format("{0}-{1}", learningGoal.LearningGoalID, learningGoal.Position + 1)" class="moveDownLearningGoal">Down</a>
+                    </td>
+                </tr>
+                foreach (var competency in learningGoal.Competencies.OrderBy(c => c.Position))
+                {
+                    <tr>
+                        <td class="width30">&nbsp;</td>
+                        <td class="width30">@Html.DisplayFor(modelItem => competency.CompetencyNumber)</td>
+                        <td colspan="2">@Html.DisplayFor(modelItem => competency.Description)</td>
+                        <td class="nowrap">
+                            <a href="#" id="edit-@competency.CompetencyID" class="editCompetency">Edit</a> |
+                            <a href="#" id="delete-@competency.CompetencyID" class="deleteCompetency" data-itemname="@competency.CompetencyNumber @competency.Description">Delete</a> |
+                            <a href="#" id="moveUp-@string.Format("{0}-{1}", competency.CompetencyID, competency.Position - 1)" class="moveUpCompetency">Up</a> |
+                            <a href="#" id="moveDown-@string.Format("{0}-{1}", competency.CompetencyID, competency.Position + 1)" class="moveDownCompetency">Down</a>
+                        </td>
+                    </tr>
+                    foreach (var descriptor in competency.Descriptors.OrderBy(d => d.Position))
+                    {
+                        <tr>
+                            <td class="width30">&nbsp;</td>
+                            <td class="width30">&nbsp;</td>
+                            <td class="width30">@Html.DisplayFor(modelItem => descriptor.DescriptorNumber)</td>
+                            <td>@Html.DisplayFor(modelItem => descriptor.Description)</td>
+                            <td class="nowrap">
+                                <a href="#" id="edit-@descriptor.DescriptorID" class="editDescriptor">Edit</a> |
+                                <a href="#" id="delete-@descriptor.DescriptorID" class="deleteDescriptor" data-itemname="@descriptor.DescriptorNumber @descriptor.Description">Delete</a> |
+                                <a href="#" id="moveUp-@string.Format("{0}-{1}", descriptor.DescriptorID, descriptor.Position - 1)" class="moveUpDescriptor">Up</a> |
+                                <a href="#" id="moveDown-@string.Format("{0}-{1}", descriptor.DescriptorID, descriptor.Position + 1)" class="moveDownDescriptor">Down</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+
+        </table>
+    }
+    else
+    {
+        <label>There are currently no Learning Goals for this Program.</label>
+    }
+    <div id="popupDialog"></div>
+    <div id="dvLoading"></div>
+    @section scripts {
+        <script type="text/javascript">
+            $m = jQuery.noConflict();
+
+            $m("#toggleSchoolGoals").live("click", function (e) {
+                //Get all tr's with the data-tag data-tag="schoolGoal"
+                var schoolRows = $m("tr[data-tag='school']");
+                var linkText = 'Hide School Learning Goals';
+                if (schoolRows.is(':visible')) {
+                    linkText = 'Show School Learning Goals';
+                }
+                schoolRows.toggle(1000);
+                $m(this).text(linkText);
+            });
+
+            $m("#createLearningGoal").live("click", function (e) {
+                e.preventDefault();
+                showLoader();
+                var programID = $m('#ProgramID').val();
+                //load learning goal from db and open in dialog
+                $m.ajax({
+                    type: "GET",
+                    url: "/Competency/LoadCreateLearningGoal",
+                    data: { programID: programID },
+                    cache: false,
+                    dataType: "json",
+                    success: function (result) {
+                        hideLoader();
+                        $m("#popupDialog").html(result.Html);
+                        $m("#popupDialog").dialog({
+                            title: 'Create Learning Goal',
+                            resizable: true,
+                            height: 480,
+                            width: 610,
+                            modal: true,
+                            buttons: {
+                                Create: function () {
+                                    var form = $('#CreateLearningGoalForm');
+                                    var formIsValid = form.valid();
+                                    if (!formIsValid) {
+                                        return;
+                                    }
+                                    showLoader();
+                                    var token = $('input[name="__RequestVerificationToken"]', form).val();
+                                    var programID = $m("#ProgramID").val();
+                                    var position = $m("#Position").val();
+                                    var titleVal = $m("#Title").val();
+                                    var descriptionVal = $m("#Description").val();
+                                    $m.ajax({
+                                        type: "POST",
+                                        url: "/Competency/CreateLearningGoal",
+                                        data: { __RequestVerificationToken: token, LearningGoalID: 0, ProgramID: programID, Position: position, Title: titleVal, Description: descriptionVal },
+                                        cache: false,
+                                        dataType: "json",
+                                        success: function (data) {
+                                            hideLoader();
+                                            if (data.Message) {
+                                                alert(data.Message);
+                                            } else {
+                                                $m("#popupDialog").dialog("close");
+                                                $m('#submit').click();
+                                            }
+                                        }
+                                    }); //end save call
+                                }, // end ok button
+                                Cancel: function () {
+                                    $m(this).dialog("close");
+                                    hideLoader();
+                                }
+                            },
+                            close: function () {
+                                //some behavior
+                            } //end buttons
+                        }); //end modal edit
+                    }
+                }); //end ajax call
+            });
+
+            $m("#createCompetency").live("click", function (e) {
+                e.preventDefault();
+                showLoader();
+                var programID = $m('#ProgramID').val();
+                //load learning goal from db and open in dialog
+                $m.ajax({
+                    type: "GET",
+                    url: "/Competency/LoadCreateCompetency",
+                    data: { programID: programID },
+                    cache: false,
+                    dataType: "json",
+                    success: function (result) {
+                        hideLoader();
+                        $m("#popupDialog").html(result.Html);
+                        $m("#popupDialog").dialog({
+                            title: 'Create Competency',
+                            resizable: true,
+                            height: 480,
+                            width: 610,
+                            modal: true,
+                            buttons: {
+                                Create: function () {
+                                    var form = $('#CreateCompetencyForm');
+                                    var formIsValid = form.valid();
+                                    if (!formIsValid) {
+                                        return;
+                                    }
+                                    showLoader();
+                                    var token = $('input[name="__RequestVerificationToken"]', form).val();
+                                    var learningGoalID = $m("#Competency_LearningGoalID").val();
+                                    var descriptionVal = $m("#Competency_Description").val();
+                                    $m.ajax({
+                                        type: "POST",
+                                        url: "/Competency/CreateCompetency",
+                                        data: { __RequestVerificationToken: token, CompetencyID: 0, LearningGoalID: learningGoalID, Position: 0, Description: descriptionVal },
+                                        cache: false,
+                                        dataType: "json",
+                                        success: function (result) {
+                                            hideLoader();
+                                            if (result.Message) {
+                                                alert(result.Message);
+                                            } else {
+                                                $m("#popupDialog").dialog("close");
+                                                $m('#submit').click();
+                                            }
+                                        }
+                                    }); //end save call
+                                }, // end ok button
+                                Cancel: function () {
+                                    $m(this).dialog("close");
+                                    hideLoader();
+                                }
+                            },
+                            close: function () {
+                                //some behavior
+                            } //end buttons
+                        }); //end modal edit
+                    }
+                }); //end ajax call
+            });
+
+            $m("#createDescriptor").live("click", function (e) {
+                e.preventDefault();
+                showLoader();
+                var programID = $m('#ProgramID').val();
+                //load learning goal from db and open in dialog
+                $m.ajax({
+                    type: "GET",
+                    url: "/Competency/LoadCreateDescriptor",
+                    data: { programID: programID },
+                    cache: false,
+                    dataType: "json",
+                    success: function (result) {
+                        hideLoader();
+                        $m("#popupDialog").html(result.Html);
+                        $m("#popupDialog").dialog({
+                            title: 'Create Descriptor',
+                            resizable: true,
+                            height: 480,
+                            width: 700,
+                            modal: true,
+                            buttons: {
+                                Create: function () {
+                                    var form = $('#CreateDescriptorForm');
+                                    var formIsValid = form.valid();
+                                    if (!formIsValid) {
+                                        return;
+                                    }
+                                    showLoader();
+                                    var token = $('input[name="__RequestVerificationToken"]', form).val();
+                                    var competencyID = $m("#Descriptor_CompetencyID").val();
+                                    var descriptionVal = $m("#Descriptor_Description").val();
+                                    $m.ajax({
+                                        type: "POST",
+                                        url: "/Competency/CreateDescriptor",
+                                        data: { __RequestVerificationToken: token, DescriptorID: 0, CompetencyID: competencyID, Position: 0, Description: descriptionVal },
+                                        cache: false,
+                                        dataType: "json",
+                                        success: function (result) {
+                                            hideLoader();
+                                            if (result.Message) {
+                                                alert(result.Message);
+                                            } else {
+                                                $m("#popupDialog").dialog("close");
+                                                $m('#submit').click();
+                                            }
+                                        }
+                                    }); //end save call
+                                }, // end ok button
+                                Cancel: function () {
+                                    $m(this).dialog("close");
+                                    hideLoader();
+                                }
+                            },
+                            close: function () {
+                                //some behavior
+                            } //end buttons
+                        }); //end modal edit
+                    }
+                }); //end ajax call
+            });
+
+            $m(".editLearningGoal").live("click", function (e) {
+                e.preventDefault();
+                showLoader();
+                var learningGoalId = $m(this).attr("id").replace('edit-', '');
+                //load learning goal from db and open in dialog
+                $m.ajax({
+                    type: "GET",
+                    url: "/Competency/EditLearningGoal",
+                    data: { id: learningGoalId },
+                    cache: false,
+                    dataType: "json",
+                    success: function (result) {
+                        hideLoader();
+                        $m("#popupDialog").html(result.Html);
+                        $m("#popupDialog").dialog({
+                            title: 'Edit Learning Goal',
+                            resizable: true,
+                            height: 480,
+                            width: 610,
+                            modal: true,
+                            buttons: {
+                                Save: function () {
+                                    var form = $('#EditLearningGoalForm');
+                                    var formIsValid = form.valid();
+                                    if (!formIsValid) {
+                                        return;
+                                    }
+                                    showLoader();
+                                    var token = $('input[name="__RequestVerificationToken"]', form).val();
+                                    var itemId = $m("#LearningGoalID").val();
+                                    var position = $m("#Position").val();
+                                    var titleVal = $m("#Title").val();
+                                    var descriptionVal = $m("#Description").val();
+                                    $m.ajax({
+                                        type: "POST",
+                                        url: "/Competency/SaveLearningGoal",
+                                        data: { __RequestVerificationToken: token, LearningGoalID: itemId, Position: position, Title: titleVal, Description: descriptionVal },
+                                        cache: false,
+                                        dataType: "json",
+                                        success: function (data) {
+                                            hideLoader();
+                                            if (data.Message) {
+                                                alert(data.Message);
+                                            } else {
+                                                $m("#popupDialog").dialog("close");
+                                                $m('#submit').click();
+                                            }
+                                        }
+                                    }); //end save call
+                                }, // end ok button
+                                Cancel: function () {
+                                    $m(this).dialog("close");
+                                }
+                            },
+                            close: function () {
+                                //some behavior
+                            } //end buttons
+                        }); //end modal edit
+                    }
+                }); //end ajax call
+            }); //end edit
+
+            $m(".deleteLearningGoal").live("click", function (e) {
+                e.preventDefault();
+                var confirmResult = confirm('Are you sure you want to delete the following Learning Goal?\n\'' + $m(this).attr('data-itemname') + '\'\nPlease be advised that all Competencies, Descriptors, and Learning Activities related to this item and to its children will also be deleted.\nDo you want to proceed?');
+
+                if (confirmResult) {
+                    //showLoader();
+                    var learningGoalID = $m(this).attr("id").replace('delete-', '');
+                    $m.ajax({
+                        type: "POST",
+                        url: "/Competency/DeleteLearningGoal",
+                        data: { learningGoalID: learningGoalID },
+                        cache: false,
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.Message) {
+                                alert(result.Message);
+                            } else {
+                                $m('#submit').click();
+                            }
+                        }
+                    }); //end ajax call
+                }
+            });
+
+            $m(".editCompetency").live("click", function (e) {
+                e.preventDefault();
+                showLoader();
+                var competencyId = $m(this).attr("id").replace('edit-', '');
+                //load learning goal from db and open in dialog
+                $m.ajax({
+                    type: "GET",
+                    url: "/Competency/EditCompetency",
+                    data: { id: competencyId },
+                    cache: false,
+                    dataType: "json",
+                    success: function (result) {
+                        hideLoader();
+                        $m("#popupDialog").html(result.Html);
+                        $m("#popupDialog").dialog({
+                            title: 'Edit Competency',
+                            resizable: true,
+                            height: 480,
+                            width: 610,
+                            modal: true,
+                            buttons: {
+                                Save: function () {
+                                    var form = $('#EditCompetencyForm');
+                                    var formIsValid = form.valid();
+                                    if (!formIsValid) {
+                                        return;
+                                    }
+                                    showLoader();
+                                    var token = $('input[name="__RequestVerificationToken"]', form).val();
+                                    var itemId = $m("#CompetencyID").val();
+                                    var position = $m("#Position").val();
+                                    var descriptionVal = $m("#Description").val();
+                                    $m.ajax({
+                                        type: "POST",
+                                        url: "/Competency/SaveCompetency",
+                                        data: { __RequestVerificationToken: token, CompetencyID: itemId, Position: position, Description: descriptionVal },
+                                        cache: false,
+                                        dataType: "json",
+                                        success: function (data) {
+                                            hideLoader();
+                                            if (data.Message) {
+                                                alert(data.Message);
+                                            } else {
+                                                $m("#popupDialog").dialog("close");
+                                                $m('#submit').click();
+                                            }
+                                        }
+                                    }); //end save call
+                                }, // end ok button
+                                Cancel: function () {
+                                    $m(this).dialog("close");
+                                }
+                            },
+                            close: function () {
+                            } //end buttons
+                        }); //end modal edit
+                    }
+                }); //end ajax call
+            }); //end edit
+
+            $m(".deleteCompetency").live("click", function (e) {
+                e.preventDefault();
+                var confirmResult = confirm('Are you sure you want to delete the following Competency?\n\'' + $m(this).attr('data-itemname') + '\'\nPlease be advised that all Descriptors and Learning Activities related to this item and to its children will also be deleted.\nDo you want to proceed?');
+
+                if (confirmResult) {
+                    //showLoader();
+                    var competencyID = $m(this).attr("id").replace('delete-', '');
+                    $m.ajax({
+                        type: "POST",
+                        url: "/Competency/DeleteCompetency",
+                        data: { competencyID: competencyID },
+                        cache: false,
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.Message) {
+                                alert(result.Message);
+                            } else {
+                                $m('#submit').click();
+                            }
+                        }
+                    }); //end ajax call
+                }
+            });
+
+            $m(".editDescriptor").live("click", function (e) {
+                e.preventDefault();
+                showLoader();
+                var competencyId = $m(this).attr("id").replace('edit-', '');
+                //load learning goal from db and open in dialog
+                $m.ajax({
+                    type: "GET",
+                    url: "/Competency/EditDescriptor",
+                    data: { id: competencyId },
+                    cache: false,
+                    dataType: "json",
+                    success: function (result) {
+                        hideLoader();
+                        $m("#popupDialog").html(result.Html);
+                        $m("#popupDialog").dialog({
+                            title: 'Edit Descriptor',
+                            resizable: true,
+                            height: 500,
+                            width: 610,
+                            modal: true,
+                            buttons: {
+                                Save: function () {
+                                    var form = $('#EditDescriptorForm');
+                                    var formIsValid = form.valid();
+                                    if (!formIsValid) {
+                                        return;
+                                    }
+                                    showLoader();
+                                    var token = $('input[name="__RequestVerificationToken"]', form).val();
+                                    var itemId = $m("#DescriptorID").val();
+                                    var position = $m("#Position").val();
+                                    var descriptionVal = $m("#Description").val();
+                                    $m.ajax({
+                                        type: "POST",
+                                        url: "/Competency/SaveDescriptor",
+                                        data: { __RequestVerificationToken: token, DescriptorID: itemId, Position: position, Description: descriptionVal },
+                                        cache: false,
+                                        dataType: "json",
+                                        success: function (data) {
+                                            hideLoader();
+                                            if (data.Message) {
+                                                alert(data.Message);
+                                            } else {
+                                                $m("#popupDialog").dialog("close");
+                                                $m('#submit').click();
+                                            }
+                                        }
+                                    }); //end save call
+                                }, // end ok button
+                                Cancel: function () {
+                                    $m(this).dialog("close");
+                                }
+                            },
+                            close: function () {
+                            } //end buttons
+                        }); //end modal edit
+                    }
+                }); //end ajax call
+            }); //end edit
+
+            $m(".deleteDescriptor").live("click", function (e) {
+                e.preventDefault();
+                var confirmResult = confirm('Are you sure you want to delete the following Descriptor?\n\'' + $m(this).attr('data-itemname') + '\'\nPlease be advised that all Learning Activities related to this item will also be deleted.\nDo you want to proceed?');
+
+                if (confirmResult) {
+                    //showLoader();
+                    var descriptorId = $m(this).attr("id").replace('delete-', '');
+                    $m.ajax({
+                        type: "POST",
+                        url: "/Competency/DeleteDescriptor",
+                        data: { descriptorID: descriptorId },
+                        cache: false,
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.Message) {
+                                alert(result.Message);
+                            } else {
+                                $m('#submit').click();
+                            }
+                        }
+                    }); //end ajax call
+                }
+            });
+
+            $m(".moveUpLearningGoal").live("click", function (e) {
+                e.preventDefault();
+                moveItem(this, 1, 1);
+            }); //end
+
+            $m(".moveDownLearningGoal").live("click", function (e) {
+                e.preventDefault();
+                moveItem(this, 1, 2);
+            }); //end
+
+            $m(".moveUpCompetency").live("click", function (e) {
+                e.preventDefault();
+                moveItem(this, 2, 1);
+            }); //end
+
+            $m(".moveDownCompetency").live("click", function (e) {
+                e.preventDefault();
+                moveItem(this, 2, 2);
+            }); //end
+
+            $m(".moveUpDescriptor").live("click", function (e) {
+                e.preventDefault();
+                moveItem(this, 3, 1);
+            }); //end
+
+            $m(".moveDownDescriptor").live("click", function (e) {
+                e.preventDefault();
+                moveItem(this, 3, 2);
+            }); //end
+
+            function moveItem(link, itemType, direction) {
+                var params = $m(link).attr("id").split('-');
+                var itemId = params[1];
+                var newPosition = params[2];
+                $m.ajax({
+                    type: "GET",
+                    url: "/Competency/MoveItem",
+                    data: { itemID: itemId, itemType: itemType, newPosition: newPosition, direction: direction },
+                    cache: false,
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.Message) {
+                            alert(result.Message);
+                        } else {
+                            $m('#submit').click();
+                        }
+                    }
+                }); //end ajax call
+            }
+
+            function showLoader() {
+                $m('#dvLoading').show();
+            }
+            function hideLoader() {
+                $m('#dvLoading').fadeOut(1000);
+            }
+
+        </script>
+    }
+}
+else
+{
+    <label>Your account is not associated with any Program. Contact the system administrator to finalize your account configuration.</label>
+}

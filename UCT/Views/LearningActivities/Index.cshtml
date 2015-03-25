@@ -1,0 +1,117 @@
+﻿@model UCT.ViewModels.LearningActivityListViewModel
+
+@{
+    ViewBag.Title = "Learning Activities";
+}
+
+<h2>Learning Activities</h2>
+@if(Model.UserPrograms.Count() > 0)
+{
+    using (Html.BeginForm("Index", "LearningActivities", FormMethod.Post, new { programID = Model.ProgramID }))
+    {
+        <div style="float:left;">
+            <label style="display:inline;padding-right:15px;">Select Program:</label>@Html.DropDownListFor(x => x.ProgramID, new SelectList(Model.UserPrograms, "ProgramID", "Description", Model.ProgramID))
+            <input id="submit" type="submit" name="Submit" value="Apply" style="margin-left:15px;" />
+        </div>
+    }
+    <div style="clear:both"></div>
+    <div>
+        <div style="float:left;padding-top:10px;">
+            @Html.ActionLink("Create New Learning Activity", "Create", new { programID = Model.ProgramID })            
+        </div>
+        <div style="float:right;">
+            <input type="button" value="Export" onclick="location.href='@Url.Action("Export", "LearningActivities", new { programID = Model.ProgramID })'" />
+        </div>
+    </div>
+    <div style="clear:both;"></div>
+    
+    if (Model.LearningActivities.Count() > 0)
+    {
+    <table>
+        <tr>
+            @*<th>
+            @Html.DisplayNameFor(model => model.LearningActivityID)
+        </th>*@
+            <th style="padding-right:10px;">
+                Number
+            </th>
+            <th>
+                Title
+            </th>
+            <th>
+                Scenario
+            </th>
+            <th>
+                Required Topics
+            </th>
+            <th>
+                Weeks
+            </th>
+            <th style="white-space:nowrap;text-align:center;">Actions</th>
+        </tr>
+
+    @foreach (var item in Model.LearningActivities)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LearningActivityNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Scenario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TopicsRequired)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Weeks)
+            </td>
+            <td style="white-space:nowrap">
+                @Html.ActionLink("Edit", "Edit", new { id = item.LearningActivityID }) |
+                <a href="#" id="delete-@item.LearningActivityID" class="deleteLearningActivity" data-itemname="@item.LearningActivityNumber @item.Title">Delete</a> |
+                @Html.ActionLink("Up", "MoveLearningActivity", new { learningActivityID = item.LearningActivityID, newPosition = (item.Position - 1), direction = 1 }) |
+                @Html.ActionLink("Down", "MoveLearningActivity", new { learningActivityID = item.LearningActivityID, newPosition = (item.Position + 1), direction = 2 })
+            </td>
+        </tr>
+    }
+    </table>
+    @section scripts 
+        {
+        <script type="text/javascript">
+            $m = jQuery.noConflict();
+            $m(".deleteLearningActivity").live("click", function (e) {
+                e.preventDefault();
+                var confirmResult = confirm('Are you sure you want to delete the following Learning Activity?\n\'' + $m(this).attr('data-itemname') + '\'\nPlease be advised that all relations to Learning Goals, Competencies, and Descriptors will also be deleted.\nDo you want to proceed?');
+
+                if (confirmResult) {
+                    var learningActivityID = $m(this).attr("id").replace('delete-', '');
+                    $m.ajax({
+                        type: "POST",
+                        url: "LearningActivities/Delete",
+                        data: { learningActivityID: learningActivityID },
+                        cache: false,
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.Message) {
+                                alert(result.Message);
+                            } else {
+                                $m('#submit').click();
+                            }
+                        }
+                    }); //end ajax call
+                }
+            });
+        </script>
+        }
+    }
+    else
+    {
+        <label>There are currently no Learning Activities for this Program.</label>
+    }
+}
+else
+{
+    <label>Your account is not associated with any Program. Contact the system administrator to finalize your account configuration</label>
+}

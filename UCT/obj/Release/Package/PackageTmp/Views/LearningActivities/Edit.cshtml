@@ -1,0 +1,83 @@
+﻿@model UCT.Models.LearningActivity
+
+@{
+    ViewBag.Title = "Edit Learning Activities";
+}
+
+<h2>Edit Learning Activity</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>LearningActivity</legend>
+        @Html.HiddenFor(model => model.LearningActivityID)
+        @Html.HiddenFor(model => model.ProgramID)
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Program)
+        </div>
+        <div class="form-value-label">
+            <span>@Html.Raw(Model.Program.Description)</span>
+        </div>
+
+        <div class="editor-label">
+            <label>Number</label>
+        </div>
+        <div class="form-value-label">
+            @Html.Raw(Model.LearningActivityNumber)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Title)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Title)
+            @Html.ValidationMessageFor(model => model.Title)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Scenario)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Scenario, 10, 20, null)
+            @Html.ValidationMessageFor(model => model.Scenario)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.TopicsRequired)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.TopicsRequired, 5, 20, null)
+            @Html.ValidationMessageFor(model => model.TopicsRequired)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Weeks)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Weeks)
+            @Html.ValidationMessageFor(model => model.Weeks)
+        </div>
+
+        <div class="editor-label">
+            <span class="bold">Created</span>&nbsp;<span>@Html.Raw(Model.CreatedDateTime.ToString())</span>&nbsp;<span class="bold">by User ID</span>&nbsp;<span>@Html.Raw(Model.CreatedBy)</span>
+        </div>
+        <div class="editor-label">
+            <span class="bold">Last Modified</span>&nbsp;<span>@Html.Raw((Model.LastModifiedDateTime.HasValue) ? Model.LastModifiedDateTime.Value.ToString() : "--")</span>&nbsp;<span class="bold">by User ID</span>&nbsp;<span>@Html.Raw((Model.LastModifiedBy.HasValue) ? Model.LastModifiedBy.Value.ToString() : "--")</span>
+        </div>
+        
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index", new { programID = Model.ProgramID })
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

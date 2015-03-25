@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="UCTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="LearningGoals">
+    <Key>
+      <PropertyRef Name="LearningGoalID" />
+    </Key>
+    <Property Name="LearningGoalID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProgramID" Type="int" />
+    <Property Name="Title" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="500" Nullable="false" />
+    <Property Name="Position" Type="smallint" Nullable="false" />
+    <Property Name="CreatedBy" Type="int" Nullable="false" />
+    <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
+    <Property Name="LastModifiedBy" Type="int" />
+    <Property Name="LastModifiedDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Competencies">
+    <Key>
+      <PropertyRef Name="CompetencyID" />
+    </Key>
+    <Property Name="CompetencyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LearningGoalID" Type="int" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="Position" Type="smallint" Nullable="false" />
+    <Property Name="CreatedBy" Type="int" Nullable="false" />
+    <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
+    <Property Name="LastModifiedBy" Type="int" />
+    <Property Name="LastModifiedDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Descriptors">
+    <Key>
+      <PropertyRef Name="DescriptorID" />
+    </Key>
+    <Property Name="DescriptorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CompetencyID" Type="int" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="Position" Type="smallint" Nullable="false" />
+    <Property Name="CreatedBy" Type="int" Nullable="false" />
+    <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
+    <Property Name="LastModifiedBy" Type="int" />
+    <Property Name="LastModifiedDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="LearningActivities">
+    <Key>
+      <PropertyRef Name="LearningActivityID" />
+    </Key>
+    <Property Name="LearningActivityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProgramID" Type="int" />
+    <Property Name="Title" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="Scenario" Type="nvarchar" MaxLength="Max" Nullable="false" />
+    <Property Name="TopicsRequired" Type="nvarchar" MaxLength="Max" Nullable="false" />
+    <Property Name="Weeks" Type="decimal" Precision="4" Scale="2" Nullable="false" />
+    <Property Name="Position" Type="smallint" Nullable="false" />
+    <Property Name="CreatedBy" Type="int" Nullable="false" />
+    <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
+    <Property Name="LastModifiedBy" Type="int" />
+    <Property Name="LastModifiedDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Competencies_LearningActivities">
+    <Key>
+      <PropertyRef Name="Competency_LearningActivityID" />
+    </Key>
+    <Property Name="Competency_LearningActivityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CompetencyItemID" Type="int" />
+    <Property Name="CompetencyType" Type="tinyint" />
+    <Property Name="LearningActivityID" Type="int" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="CreatedDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Programs">
+    <Key>
+      <PropertyRef Name="ProgramID" />
+    </Key>
+    <Property Name="ProgramID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="200" />
+    <Property Name="CreatedBy" Type="int" Nullable="false" />
+    <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
+    <Property Name="LastModifiedBy" Type="int" />
+    <Property Name="LastModifiedDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="ProgramUsers">
+    <Key>
+      <PropertyRef Name="ProgramUserID" />
+    </Key>
+    <Property Name="ProgramUserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="ProgramID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="webpages_OAuthMembership">
+    <Key>
+      <PropertyRef Name="Provider" />
+      <PropertyRef Name="ProviderUserId" />
+    </Key>
+    <Property Name="Provider" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="ProviderUserId" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_ProgramUsers_Programs">
+    <End Role="Programs" Type="Self.Programs" Multiplicity="1" />
+    <End Role="ProgramUsers" Type="Self.ProgramUsers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Programs">
+        <PropertyRef Name="ProgramID" />
+      </Principal>
+      <Dependent Role="ProgramUsers">
+        <PropertyRef Name="ProgramID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LearningGoals_Programs">
+    <End Role="Programs" Type="Self.Programs" Multiplicity="0..1" />
+    <End Role="LearningGoals" Type="Self.LearningGoals" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Programs">
+        <PropertyRef Name="ProgramID" />
+      </Principal>
+      <Dependent Role="LearningGoals">
+        <PropertyRef Name="ProgramID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Competencies_LearningGoals">
+    <End Role="LearningGoals" Type="Self.LearningGoals" Multiplicity="1" />
+    <End Role="Competencies" Type="Self.Competencies" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LearningGoals">
+        <PropertyRef Name="LearningGoalID" />
+      </Principal>
+      <Dependent Role="Competencies">
+        <PropertyRef Name="LearningGoalID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Descriptors_Competencies">
+    <End Role="Competencies" Type="Self.Competencies" Multiplicity="1" />
+    <End Role="Descriptors" Type="Self.Descriptors" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Competencies">
+        <PropertyRef Name="CompetencyID" />
+      </Principal>
+      <Dependent Role="Descriptors">
+        <PropertyRef Name="CompetencyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LearningActivities_Programs">
+    <End Role="Programs" Type="Self.Programs" Multiplicity="0..1" />
+    <End Role="LearningActivities" Type="Self.LearningActivities" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Programs">
+        <PropertyRef Name="ProgramID" />
+      </Principal>
+      <Dependent Role="LearningActivities">
+        <PropertyRef Name="ProgramID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Competencies_LearningActivities_LearningActivities">
+    <End Role="LearningActivities" Type="Self.LearningActivities" Multiplicity="0..1" />
+    <End Role="Competencies_LearningActivities" Type="Self.Competencies_LearningActivities" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LearningActivities">
+        <PropertyRef Name="LearningActivityID" />
+      </Principal>
+      <Dependent Role="Competencies_LearningActivities">
+        <PropertyRef Name="LearningActivityID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="UCTModelStoreContainer">
+    <EntitySet Name="LearningGoals" EntityType="Self.LearningGoals" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Competencies" EntityType="Self.Competencies" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Descriptors" EntityType="Self.Descriptors" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LearningActivities" EntityType="Self.LearningActivities" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Competencies_LearningActivities" EntityType="Self.Competencies_LearningActivities" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Programs" EntityType="Self.Programs" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProgramUsers" EntityType="Self.ProgramUsers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="webpages_OAuthMembership" EntityType="Self.webpages_OAuthMembership" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_ProgramUsers_Programs" Association="Self.FK_ProgramUsers_Programs">
+      <End Role="Programs" EntitySet="Programs" />
+      <End Role="ProgramUsers" EntitySet="ProgramUsers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LearningGoals_Programs" Association="Self.FK_LearningGoals_Programs">
+      <End Role="Programs" EntitySet="Programs" />
+      <End Role="LearningGoals" EntitySet="LearningGoals" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Competencies_LearningGoals" Association="Self.FK_Competencies_LearningGoals">
+      <End Role="LearningGoals" EntitySet="LearningGoals" />
+      <End Role="Competencies" EntitySet="Competencies" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Descriptors_Competencies" Association="Self.FK_Descriptors_Competencies">
+      <End Role="Competencies" EntitySet="Competencies" />
+      <End Role="Descriptors" EntitySet="Descriptors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LearningActivities_Programs" Association="Self.FK_LearningActivities_Programs">
+      <End Role="Programs" EntitySet="Programs" />
+      <End Role="LearningActivities" EntitySet="LearningActivities" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Competencies_LearningActivities_LearningActivities" Association="Self.FK_Competencies_LearningActivities_LearningActivities">
+      <End Role="LearningActivities" EntitySet="LearningActivities" />
+      <End Role="Competencies_LearningActivities" EntitySet="Competencies_LearningActivities" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

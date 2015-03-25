@@ -1,0 +1,72 @@
+﻿@model UCT.ViewModels.ProgramUserViewModel
+
+@{
+    ViewBag.Title = "Program Users";
+}
+
+<h2>Program Users</h2>
+
+<label>Program:&nbsp;@Html.DisplayFor(model => model.Program.Description)</label>
+<p>
+    @Html.ActionLink("Add Program Director User", "Create", new { programID = Model.ProgramID })
+</p>
+@if(Model.ProgramUsers.Count() > 0)
+{
+    <table>
+        <tr>
+            <th>
+                Program Director Username
+            </th>
+            <th></th>
+        </tr>
+
+    @foreach (var item in Model.ProgramUsers)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserProfile.UserName)
+            </td>
+            <td>
+                <a href="#" id="remove-@item.ProgramUserID" class="removeProgramUser" data-itemname="@item.UserProfile.UserName">Remove</a>
+            </td>
+        </tr>
+    }
+
+    </table>
+    @section scripts
+     {
+    <script type="text/javascript">
+            $m = jQuery.noConflict();
+            $m(".removeProgramUser").live("click", function (e) {
+                e.preventDefault();
+                var confirmResult = confirm('Are you sure you want to remove Program Director \'' + $m(this).attr('data-itemname') + '\' from this program?');
+
+                if (confirmResult) {
+                    var programUserID = $m(this).attr("id").replace('remove-', '');
+                    $m.ajax({
+                        type: "POST",
+                        url: "ProgramUser/Delete",
+                        data: { programUserID: programUserID },
+                        cache: false,
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.Message) {
+                                alert(result.Message);
+                            } else {
+                                window.location.reload();
+                            }
+                        }
+                    }); //end ajax call
+                }
+            });
+    </script>
+    }
+}
+else
+{
+    <label>There are currently no Program Director Users tied to this program</label>
+}
+<p>&nbsp;</p>
+<div>
+    @Html.ActionLink("Back to Program List", "Index", "Program", null, null)
+</div>

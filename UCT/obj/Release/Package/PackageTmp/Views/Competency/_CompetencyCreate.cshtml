@@ -1,0 +1,43 @@
+﻿@model UCT.ViewModels.CreateCompetencyFormViewModel
+
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+@using (Html.BeginForm("CreateCompetency", "Competency", FormMethod.Post, new { id = "CreateCompetencyForm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Competency</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Program)
+        </div>
+        <div class="form-value-label">
+            <span>@Html.Raw(Model.Program.Description)</span>
+        </div>
+
+        <div class="editor-label">
+            <label for="Competency_LearningGoalID">Learning Goal</label>
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(x => x.Competency.LearningGoalID, new SelectList(Model.Program.LearningGoals.OrderBy(lg => lg.Position), "LearningGoalID", "Title", Model.Competency.LearningGoalID))
+            @Html.ValidationMessageFor(model => model.Competency.LearningGoalID)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Competency.Description)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Competency.Description, 5, 20, null)
+            @Html.ValidationMessageFor(model => model.Competency.Description)
+        </div>
+
+    </fieldset>
+}
+
+<div>
+    @*@Html.ActionLink("Back to List", "Index")*@
+</div>

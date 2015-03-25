@@ -1,0 +1,32 @@
+﻿@model UCT.ViewModels.CreateSchoolCompetencyFormViewModel
+
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+@using (Html.BeginForm("CreateCompetency", "SchoolCompetency", FormMethod.Post, new { id = "CreateCompetencyForm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Graduate School Competency</legend>
+
+        <div class="editor-label">
+            <label for="Competency_LearningGoalID">Learning Goal</label>
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(x => x.Competency.LearningGoalID, new SelectList(Model.LearningGoals.OrderBy(lg => lg.Position), "LearningGoalID", "Title", Model.Competency.LearningGoalID))
+            @Html.ValidationMessageFor(model => model.Competency.LearningGoalID)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Competency.Description)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Competency.Description, 5, 20, null)
+            @Html.ValidationMessageFor(model => model.Competency.Description)
+        </div>
+
+    </fieldset>
+}

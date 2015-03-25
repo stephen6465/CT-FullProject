@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8b203aa6c9d84f78b39949e3b3001a0e" Name="Diagram1">
+        <EntityTypeShape EntityType="UCTModel.LearningGoal" Width="1.5" PointX="2.25" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.Competency" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.Descriptor" Width="1.5" PointX="7.25" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.LearningActivity" Width="1.75" PointX="10.25" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.Program" Width="2.375" PointX="5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.ProgramUser" Width="1.5" PointX="2.25" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.CompetencyLearningActivity" Width="2.75" PointX="10.25" PointY="4.375" IsExpanded="true" />
+        <AssociationConnector Association="UCTModel.FK_ProgramUsers_Programs" />
+        <AssociationConnector Association="UCTModel.FK_LearningGoals_Programs" ManuallyRouted="true" >
+          <ConnectorPoint PointX="5" PointY="2.8143277751865665" />
+          <ConnectorPoint PointX="3" PointY="2.8143277751865665" />
+          <ConnectorPoint PointX="3" PointY="3.75" />
+        </AssociationConnector>
+        <AssociationConnector Association="UCTModel.FK_Competencies_LearningGoals" />
+        <AssociationConnector Association="UCTModel.FK_Descriptors_Competencies" />
+        <AssociationConnector Association="UCTModel.FK_LearningActivities_Programs" />
+        <AssociationConnector Association="UCTModel.FK_Competencies_LearningActivities_LearningActivities" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

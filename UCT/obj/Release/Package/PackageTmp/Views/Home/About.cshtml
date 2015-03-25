@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+    <h2>@ViewBag.Message</h2>
+</hgroup>
+
+<article>
+    <p>
+        The UMUC Competency Tracker (UCT) System is a web-based application in which program directors and/or administrators will have the capability define a methodology where educational programs are mapped to associated learning activities and competencies defined in order to achieve the university’s mission objective. Version 2.0 built 11/5/14. 
+
+    </p>
+
+    
+</article>
+
+<aside>
+    <h3>More Info</h3>
+    <p>
+        Additional information.
+    </p>
+    <ul>
+        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+        <li>@Html.ActionLink("About", "About", "Home")</li>
+        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+    </ul>
+</aside>

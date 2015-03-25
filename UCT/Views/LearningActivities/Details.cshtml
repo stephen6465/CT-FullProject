@@ -1,0 +1,43 @@
+﻿@model UCT.Models.LearningActivity
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Learning Activity Details</h2>
+
+<fieldset>
+    <legend>LearningActivity</legend>
+
+    <div class="display-label">
+        <b>  @Html.DisplayNameFor(model => model.LearningActivitiesID)</b>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LearningActivitiesID)
+    </div>
+
+    <div class="display-label">
+        <b>   @Html.DisplayNameFor(model => model.Description)</b>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Description)
+    </div>
+
+    @*<div class="display-label">
+         @Html.DisplayNameFor(model => model.CreatedBy)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedBy)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CreatedDateTime)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedDateTime)
+    </div>*@
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.LearningActivitiesID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

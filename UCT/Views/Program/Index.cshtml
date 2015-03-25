@@ -1,0 +1,41 @@
+﻿@model IEnumerable<UCT.Models.Program>
+
+@{
+    ViewBag.Title = "Programs";
+}
+
+<h2>Programs</h2>
+
+<p>
+    @Html.ActionLink("Create a New Program", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            Program Name
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ProgramID }) |
+            @Html.ActionLink("Users", "Index", "ProgramUser", new { programID = item.ProgramID }, null) |
+            @if (User.IsInRole("SuperUser")) 
+            {        
+                  @Html.ActionLink("Delete", "Delete", new { id = item.ProgramID }) 
+            }
+          else
+            {
+              <div> Delete</div>   
+               @*@Html.ActionLink("Delete", "")*@
+            }
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,111 @@
+﻿@model UCT.ViewModels.CompetencyLearningActivitiesViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+@Styles.Render("~/Content/themes/base/css")
+<h2>Allocate Learning Activities</h2>
+@if (Model.UserPrograms.Count() > 0)
+{
+    using (Html.BeginForm("Index", "CompetencyLearningActivities", FormMethod.Post, new { programID = Model.ProgramID }))
+    {
+        <div style="float:left;">
+            <label style="display:inline;padding-right:15px;">Select Program:</label>@Html.DropDownListFor(x => x.ProgramID, new SelectList(Model.UserPrograms, "ProgramID", "Description", Model.ProgramID))
+            <input id="submit" type="submit" name="Submit" value="Apply" style="margin-left:15px;" />
+        </div>
+    }
+    <div style="clear:both"></div>
+    <div>
+        <div style="float:right;">
+            <input type="button" value="Export" onclick="location.href='@Url.Action("Export", "CompetencyLearningActivities", new { programID = Model.ProgramID })'" />
+        </div>
+    </div>
+    <div style="clear:both;"></div>
+    if (Model.LearningGoals.Count() > 0)
+    {
+        if (Model.LearningActivities.Count() > 0)
+        {
+            using (Html.BeginForm("Save", "CompetencyLearningActivities", FormMethod.Post, new { programID = Model.ProgramID }))
+            {
+                @Html.HiddenFor(model => model.ProgramID)
+                <table id="competencyHierarchyTable">
+                    <tr>
+                        <th colspan="4">&nbsp;</th>
+                        <th style="text-align:center;" colspan="@Model.LearningActivities.Count()">Learning Activities</th>
+                    </tr>
+                    <tr>
+                        <th colspan="4">
+                            Goals, Competencies, and Descriptors
+                        </th>
+                        @foreach (var learningActivity in Model.LearningActivities)
+                        {
+                            <th title="@learningActivity.Title">
+                                @learningActivity.LearningActivityNumber
+                            </th>
+                        }
+                    </tr>
+
+                    @foreach (var learningGoal in Model.LearningGoals)
+                    {
+                        <tr>
+                            <td class="width30">@Html.DisplayFor(modelItem => learningGoal.LearningGoalNumber)</td>
+                            <td colspan="3"><b>@Html.DisplayFor(modelItem => learningGoal.Title)</b>:&nbsp;@Html.DisplayFor(modelItem => learningGoal.Description)</td>
+                            @foreach (var learningActivity in Model.LearningActivities)
+                            {
+                                <td>
+                                    <input type="checkbox" name="LearningGoal_@(learningGoal.LearningGoalID)_@(learningActivity.LearningActivityID)" checked="@((Model.CompetencyLearningActivities.FirstOrDefault(r => r.CompetencyItemID == learningGoal.LearningGoalID && 
+                                                                                                                                                                                                                   r.CompetencyType.Equals(UCT.Models.CompetencyType.LearningGoal) &&
+                                                                                                                                                                                                                   r.LearningActivityID == learningActivity.LearningActivityID) != null) ? true : false)" /></td>
+                            }
+                        </tr>
+                        foreach (var competency in learningGoal.Competencies.OrderBy(c => c.Position))
+                        {
+                            <tr>
+                                <td class="width30">&nbsp;</td>
+                                <td class="width30">@Html.DisplayFor(modelItem => competency.CompetencyNumber)</td>
+                                <td colspan="2">@Html.DisplayFor(modelItem => competency.Description)</td>
+                                @foreach (var learningActivity in Model.LearningActivities)
+                                {
+                                    <td>
+                                        <input type="checkbox" name="Competency_@(competency.CompetencyID)_@(learningActivity.LearningActivityID)" checked="@((Model.CompetencyLearningActivities.FirstOrDefault(r => r.CompetencyItemID == competency.CompetencyID &&
+                                                                                                  r.CompetencyType.Equals(UCT.Models.CompetencyType.Competency) &&
+                                                                                                  r.LearningActivityID == learningActivity.LearningActivityID) != null) ? true : false)"></td>
+                                }
+                            </tr>
+                            foreach (var descriptor in competency.Descriptors.OrderBy(d => d.Position))
+                            {
+                                <tr>
+                                    <td class="width30">&nbsp;</td>
+                                    <td class="width30">&nbsp;</td>
+                                    <td class="width30">@Html.DisplayFor(modelItem => descriptor.DescriptorNumber)</td>
+                                    <td>@Html.DisplayFor(modelItem => descriptor.Description)</td>                        
+                                    @foreach (var learningActivity in Model.LearningActivities)
+                                    {
+                                        <td>
+                                            <input type="checkbox" name="Descriptor_@(descriptor.DescriptorID)_@(learningActivity.LearningActivityID)" checked="@((Model.CompetencyLearningActivities.FirstOrDefault(r => r.CompetencyItemID == descriptor.DescriptorID &&
+                                                                                                      r.CompetencyType.Equals(UCT.Models.CompetencyType.Descriptor) &&
+                                                                                                      r.LearningActivityID == learningActivity.LearningActivityID) != null) ? true : false)"></td>
+                                    }
+                                </tr>
+                            }
+                        }
+                    }
+                </table>
+                <div><div style="width:100%;text-align:center;"><input name="save" id="save" type="submit" value="Save" /></div></div>
+                <div style="clear:both"></div>
+            }
+        }
+        else
+        {
+            <label>There are currently no Learning Activities for this Program to allocate.</label>
+        }
+    }
+    else
+    {
+        <label>There are currently no Competency items for this Program.</label>
+    }
+}
+else
+{
+    <label>Your account is not associated with any Program. Contact the system administrator to finalize your account configuration</label>
+}

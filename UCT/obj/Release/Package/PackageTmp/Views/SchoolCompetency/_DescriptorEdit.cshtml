@@ -1,0 +1,53 @@
+﻿@model UCT.Models.Descriptor
+
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+@using (Html.BeginForm("SaveDescriptor", "SchoolCompetency", FormMethod.Post, new { id = "EditDescriptorForm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Graduate School Descriptor</legend>
+
+        @Html.HiddenFor(model => model.DescriptorID)
+        @Html.HiddenFor(model => model.Position)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Competency.LearningGoal)
+        </div>
+        <div class="form-value-label">
+            <span>@Html.Raw(Model.Competency.LearningGoal.Title)</span>
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Competency)
+        </div>
+        <div class="form-value-label">
+            <span>@Html.Raw(Model.Competency.Description)</span>
+        </div>
+
+        <div class="editor-label">
+            <label>Number</label>
+        </div>
+        <div class="form-value-label">
+            @Html.Raw(Model.DescriptorNumber)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Description)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Description, 5, 20, null)
+            @Html.ValidationMessageFor(model => model.Description)
+        </div>
+        <div class="editor-label">
+            <span class="bold">Created</span>&nbsp;<span>@Html.Raw(Model.CreatedDateTime.ToString())</span>&nbsp;<span class="bold">by User ID</span>&nbsp;<span>@Html.Raw(Model.CreatedBy)</span>
+        </div>
+        <div class="editor-label">
+            <span class="bold">Last Modified</span>&nbsp;<span>@Html.Raw((Model.LastModifiedDateTime.HasValue) ? Model.LastModifiedDateTime.Value.ToString() : "--")</span>&nbsp;<span class="bold">by User ID</span>&nbsp;<span>@Html.Raw((Model.LastModifiedBy.HasValue) ? Model.LastModifiedBy.Value.ToString() : "--")</span>
+        </div>
+    </fieldset>
+}

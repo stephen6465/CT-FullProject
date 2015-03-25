@@ -1,0 +1,81 @@
+﻿@model UCT.ViewModels.CreateDescriptorFormViewModel
+
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+@using (Html.BeginForm("CreateDescriptor", "Competency", FormMethod.Post, new { id = "CreateDescriptorForm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Descriptor</legend>
+
+        @Html.HiddenFor(model => model.Program.ProgramID)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Program)
+        </div>
+        <div class="form-value-label">
+            <span>@Html.Raw(Model.Program.Description)</span>
+        </div>
+
+        <div class="editor-label">
+            <label for="Descriptor_Competency_LearningGoalID">Learning Goal</label>
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(x => x.Descriptor.Competency.LearningGoalID, new SelectList(Model.Program.LearningGoals.OrderBy(lg => lg.Position), "LearningGoalID", "Title", Model.Descriptor.Competency.LearningGoalID))
+            @Html.ValidationMessageFor(model => model.Descriptor.Competency.LearningGoalID)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Descriptor.Competency)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(x => x.Descriptor.CompetencyID, new SelectList(new List<UCT.Models.Competency>(), "CompetencyID", "Description", Model.Descriptor.CompetencyID))
+             @Html.ValidationMessageFor(model => model.Descriptor.CompetencyID)
+        </div>
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Descriptor.Description)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Descriptor.Description, 5, 20, null)
+            @Html.ValidationMessageFor(model => model.Descriptor.Description)
+        </div>
+
+        
+    </fieldset>
+}
+
+<div>
+    @*@Html.ActionLink("Back to List", "Index")*@
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        loadCompetencies();
+
+        $("#Descriptor_Competency_LearningGoalID").on("change", function (event) {
+            loadCompetencies();
+        });
+    });
+
+    function loadCompetencies() {
+        var learningGoalID = $("#Descriptor_Competency_LearningGoalID").val();
+        $m.ajax({
+            type: "GET",
+            url: "Competency/GetCompetenciesByLearningGoal",
+            data: { LearningGoalID: learningGoalID },
+            cache: false,
+            dataType: "json",
+            success: function (items) {
+                var ddl = $("#Descriptor_CompetencyID");
+                ddl.find('option').remove().end()
+                for (i = 0; i < items.length; i++)
+                    ddl.append("<option value='" + items[i].Value + "'>" + items[i].Text + "</option>");
+            }
+        }); //end call
+    }
+</script>

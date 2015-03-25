@@ -1,0 +1,44 @@
+﻿@model UCT.ViewModels.CreateProgramUserFormViewModel
+
+@{
+    ViewBag.Title = "Add Program User";
+}
+
+<h2>Add Program User</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(model => model.ProgramUser.ProgramID)
+    
+    <fieldset>
+        <legend>Program User</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Program)
+        </div>
+        <div class="form-value-label">
+            <span>@Html.Raw(Model.Program.Description)</span>
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ProgramUser.UserProfile)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(x => x.ProgramUser.UserId, new SelectList(Model.ProgramDirectorUserList.OrderBy(u => u.UserName), "UserId", "UserName", Model.ProgramUser.UserId))
+            @Html.ValidationMessageFor(model => model.ProgramUser.UserId)
+        </div>
+        <p>
+            <input type="submit" value="Add" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to Program Users List", "Index", new { programID = Model.Program.ProgramID })
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
