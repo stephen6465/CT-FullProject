@@ -30,7 +30,7 @@ namespace UCT.Models
         public Nullable<int> VersionID { get; set; }
     
         public virtual LearningGoals_Archive LearningGoals_Archive { get; set; }
-        public virtual Version Version { get; set; }
         public virtual ICollection<Descriptors_Archive> Descriptors_Archive { get; set; }
+        public virtual Version Version { get; set; }
     }
 }

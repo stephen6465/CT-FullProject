@@ -14,7 +14,8 @@ using UCT.Models;
 namespace UCT.Controllers
 {
     [Authorize]
-    [InitializeSimpleMembership]
+    //[InitializeSimpleMembership]
+    
     public class AccountController : Controller
     {
         //

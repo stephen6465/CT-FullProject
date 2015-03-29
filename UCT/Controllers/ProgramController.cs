@@ -15,7 +15,7 @@ using System.Security.Principal;
 
 namespace UCT.Controllers
 {
-    [InitializeSimpleMembership]
+   // [InitializeSimpleMembership]
     public class ProgramController : BaseController
     {
         IUCTRepository _repository;

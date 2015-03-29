@@ -1,4 +1,5 @@
-﻿@model IEnumerable<UCT.Models.UserProfile>
+﻿@*@model IEnumerable<UCT.Models.UserProfile>*@
+@model UCT.ViewModels.UserProfileViewModel
 
 @{
     ViewBag.Title = "User Administration";
@@ -9,21 +10,33 @@
 @*<p>
     @Html.ActionLink("Create New", "Create")
 </p>*@
+
+@using (Html.BeginForm("Index", "CompetencyLearningActivities", FormMethod.Post, new { VersionName = Model.VersionName }))
+{
+    <div style="float:left;">
+        <label style="display:inline;padding-right:15px;">Select Program:</label>@Html.DropDownListFor(x => x.ProgramID, new SelectList(Model.UserPrograms, "ProgramID", "Description", Model.ProgramID))
+        <label style="display:inline;padding-right:15px;">Version Name:</label>
+        @Html.TextBox("VName")
+        <input id="submit" type="submit" name="Submit" value="Apply" style="margin-left:15px;" />
+    </div>
+   
+}
+
 <table>
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.UserName)
+            @Html.DisplayNameFor(model =>  Model.UserProfiles.FirstOrDefault().UserName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Email)
+            @Html.DisplayNameFor(model => Model.UserProfiles.FirstOrDefault().Email)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IsApproved)
+            @Html.DisplayNameFor(model => Model.UserProfiles.FirstOrDefault().IsApproved)
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.UserProfiles) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.UserName)

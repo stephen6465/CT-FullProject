@@ -16,8 +16,10 @@ namespace UCT.Models
         IEnumerable<CompetencyLearningActivity> GetCompetencyLearningActivitiesByProgram(int programID);
         IEnumerable<ProgramUser> GetProgramUsersByProgram(int programId);
         IEnumerable<UserProfile> GetUsers();
-        Program GetProgramByID(int programID);
-        LearningGoal GetLearningGoalByID(int learningGoalID);
+        IEnumerable<Version> GetAllVersions();
+        Version GetVersionByID(int VersionID);
+        Program GetProgramByID(int ProgramID);
+        LearningGoal GetLearningGoalByID(int LearningGoalID);
         Competency GetCompetencyByID(int competencyID);
         Descriptor GetDescriptorByID(int descriptorID);
         LearningActivity GetLearningActivityByID(int learningActivityID);
@@ -26,6 +28,7 @@ namespace UCT.Models
         Competency GetCompetencyByLearningGoalAndPosition(int learningGoalID, short position);
         Descriptor GetDescriptorByCompetencyAndPosition(int competencyID, short position);
         LearningActivity GetLearningActivityByProgramAndPosition(int programID, short position);
+        
         string CreateProgram(Program program);
         string CreateProgramLearningGoal(LearningGoal learningGoal);
         string CreateSchoolLearningGoal(LearningGoal learningGoal);
@@ -34,6 +37,7 @@ namespace UCT.Models
         string CreateLearningActivity(LearningActivity learningActivity);
         string CreateCompetencyLearningActivity(CompetencyLearningActivity competencyLearningActivity);
         string CreateProgramUser(ProgramUser programUser);
+        string CreateVersion(Version version);
         string UpdateProgram(Program program);
         string UpdateLearningGoal(LearningGoal learningGoal);
         string UpdateCompetency(Competency competency);

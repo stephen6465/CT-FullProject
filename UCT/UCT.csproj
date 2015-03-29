@@ -276,6 +276,8 @@
     <Compile Include="ViewModels\CreateDescriptorFormViewModel.cs" />
     <Compile Include="ViewModels\CreateCompetencyFormViewModel.cs" />
     <Compile Include="ViewModels\ProgramUserViewModel.cs" />
+    <Compile Include="ViewModels\UserProfileViewModel.cs" />
+    <Compile Include="ViewModels\VersionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />

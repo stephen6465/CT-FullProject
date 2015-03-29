@@ -11,6 +11,7 @@ namespace UCT.Models
         private UCTContext _db = new UCTContext();
         private UsersContext _usersDb = new UsersContext();
         private IPrincipal _user;
+        private  UCTEntities _uct = new UCTEntities();
 
         public EFUCTRepository(IPrincipal user)
         {
@@ -36,11 +37,18 @@ namespace UCT.Models
             return string.Empty;
         }
 
+       
+
         public IEnumerable<Program> GetAllPrograms()
         {
-            return _db.Programs.ToList(); ;
+            return _db.Programs.ToList(); 
         }
 
+        public IEnumerable<Version> GetAllVersions()
+        {
+            return _uct.Versions.ToList();
+        } 
+        
         public IEnumerable<Program> GetProgramsByUser(int userId)
         {
             return _db.Programs.Where(p => p.ProgramUsers.Any(pu => pu.UserId == userId)).ToList();
@@ -76,11 +84,17 @@ namespace UCT.Models
             return _usersDb.UserProfiles;
         }
 
+        public Version GetVersionByID(int versionID)
+        {
+            return _uct.Versions.FirstOrDefault(v => v.VersionID == versionID);
+        }
+        
         public Program GetProgramByID(int programID)
         {
             return _db.Programs.FirstOrDefault(p => p.ProgramID == programID);
         }
 
+        
         public LearningGoal GetLearningGoalByID(int learningGoalID)
         {
             return _db.LearningGoals.FirstOrDefault(lg => lg.LearningGoalID == learningGoalID);
@@ -127,6 +141,25 @@ namespace UCT.Models
         public LearningActivity GetLearningActivityByProgramAndPosition(int programID, short position)
         {
             return (from x in _db.LearningActivities where x.ProgramID == programID && x.Position == position select x).FirstOrDefault();
+        }
+
+
+        public string CreateVersion(Version version)
+        {
+            // Need to implment this
+            try
+            {
+                version.ArchiveDate = DateTime.UtcNow;
+                _uct.Versions.Add(version);
+                _uct.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+            return string.Empty;
+
         }
 
         public string CreateProgram(Program program)

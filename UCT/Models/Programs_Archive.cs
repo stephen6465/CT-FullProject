@@ -31,7 +31,7 @@ namespace UCT.Models
     
         public virtual ICollection<LearningActivities_Archive> LearningActivities_Archive { get; set; }
         public virtual ICollection<LearningGoals_Archive> LearningGoals_Archive { get; set; }
-        public virtual Version Version { get; set; }
         public virtual ICollection<ProgramUsers_Archive> ProgramUsers_Archive { get; set; }
+        public virtual Version Version { get; set; }
     }
 }

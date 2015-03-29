@@ -54,3 +54,6 @@ C:\GroupProject\UCT\UCT.UnitTests\bin\Debug\Mono.Math.xml
 C:\GroupProject\UCT\UCT.UnitTests\obj\Debug\UCT.UnitTests.csprojResolveAssemblyReference.cache
 C:\GroupProject\UCT\UCT.UnitTests\obj\Debug\UCT.UnitTests.dll
 C:\GroupProject\UCT\UCT.UnitTests\obj\Debug\UCT.UnitTests.pdb
+C:\Users\swilson\Documents\swen670\CT-FullProject\UCT.UnitTests\obj\Debug\UCT.UnitTests.csprojResolveAssemblyReference.cache
+C:\Users\swilson\Documents\swen670\CT-FullProject\UCT.UnitTests\obj\Debug\UCT.UnitTests.dll
+C:\Users\swilson\Documents\swen670\CT-FullProject\UCT.UnitTests\obj\Debug\UCT.UnitTests.pdb

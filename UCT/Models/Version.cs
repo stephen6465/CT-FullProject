@@ -28,7 +28,7 @@ namespace UCT.Models
         public int VersionID { get; set; }
         public string VersionName { get; set; }
         public Nullable<int> ProgramID { get; set; }
-        public byte[] ArchiveDate { get; set; }
+        public System.DateTime ArchiveDate { get; set; }
     
         public virtual ICollection<Competencies_Archive> Competencies_Archive { get; set; }
         public virtual ICollection<Competencies_LearningActivities_Archive> Competencies_LearningActivities_Archive { get; set; }
