@@ -7,7 +7,7 @@ using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using UCT.Models;
-
+using UCT.ViewModels;
 
 
 namespace UCT.Controllers
@@ -30,10 +30,13 @@ namespace UCT.Controllers
 
         public ActionResult Index()
         {
-            
+           UserProfileViewModel  viewModel = new UserProfileViewModel();
+
+            viewModel.UserProfiles = _repository.GetUsers();
+            viewModel.UserPrograms = _repository.GetAllPrograms();
             
             //Fix this here and send the ViewModel to the View and this is done... 
-            return View(db.UserProfiles.ToList());
+            return View("Index", viewModel);
         }
 
         //
