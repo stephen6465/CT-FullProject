@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace UCT.Models
 {
     using System;
@@ -26,6 +28,9 @@ namespace UCT.Models
         }
     
         public int VersionID { get; set; }
+
+        [Required(ErrorMessage = "Version Name is required")]
+        [Display(Name = "Version Name")]
         public string VersionName { get; set; }
         public Nullable<int> ProgramID { get; set; }
         public System.DateTime ArchiveDate { get; set; }
