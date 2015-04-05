@@ -15,6 +15,15 @@ namespace UCT.Models
         IEnumerable<LearningActivity> GetLearningActivitiesByProgram(int programID);
         IEnumerable<CompetencyLearningActivity> GetCompetencyLearningActivitiesByProgram(int programID);
         IEnumerable<ProgramUser> GetProgramUsersByProgram(int programId);
+
+
+        IEnumerable<LearningGoals_Archive> GetArchiveLearningGoalsByVersion(int versionID);
+        IEnumerable<LearningGoals_Archive> GetArchiveSchoolLearningGoals();
+        IEnumerable<LearningActivities_Archive> GetArchiveLearningActivitiesByVersion(int versionID);
+        IEnumerable<Competencies_LearningActivities_Archive> GetArchiveCompetencyLearningActivitiesByVersion(int versionID);
+        IEnumerable<ProgramUsers_Archive> GetArchiveProgramUsersByVersion(int versionId);
+        IEnumerable<Competencies_Archive> GetArchiveCompetenciesByVersion(int versionID);
+
         IEnumerable<UserProfile> GetUsers();
         IEnumerable<Version> GetAllVersions();
         Version GetVersionByID(int VersionID);
@@ -28,7 +37,8 @@ namespace UCT.Models
         Competency GetCompetencyByLearningGoalAndPosition(int learningGoalID, short position);
         Descriptor GetDescriptorByCompetencyAndPosition(int competencyID, short position);
         LearningActivity GetLearningActivityByProgramAndPosition(int programID, short position);
-        
+        Version GetVersionByVersionName(string versionName);
+
         string CreateProgram(Program program);
         string CreateProgramLearningGoal(LearningGoal learningGoal);
         string CreateSchoolLearningGoal(LearningGoal learningGoal);
@@ -37,7 +47,12 @@ namespace UCT.Models
         string CreateLearningActivity(LearningActivity learningActivity);
         string CreateCompetencyLearningActivity(CompetencyLearningActivity competencyLearningActivity);
         string CreateProgramUser(ProgramUser programUser);
-        string CreateVersion(Version version);
+        string CreateVersion(String versionName, int programID);
+        string CreateArcProgramUsers(IEnumerable<ProgramUser> programUsers, int versionID);
+        string CreateArcProgramLearningGoal(IEnumerable<LearningGoal> learningGoals, int versionID);
+        string CreateArcCompetencies(Competency competency, int versionID);
+        string CreateArcCompetencyLearnActivity(IEnumerable<CompetencyLearningActivity> competencyLearningActivities,
+            int versionID);
         string UpdateProgram(Program program);
         string UpdateLearningGoal(LearningGoal learningGoal);
         string UpdateCompetency(Competency competency);

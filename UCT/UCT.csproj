@@ -204,6 +204,7 @@
     <Compile Include="Controllers\LearningActivitiesController.cs" />
     <Compile Include="Controllers\ProgramController.cs" />
     <Compile Include="Controllers\ProgramUserController.cs" />
+    <Compile Include="Controllers\VersionController.cs" />
     <Compile Include="DAL\UCTContext.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -455,6 +456,7 @@
     <Content Include="Views\SchoolCompetency\_LearningGoalCreate.cshtml" />
     <Content Include="Views\SchoolCompetency\_LearningGoalEdit.cshtml" />
     <Content Include="Views\SchoolCompetency\Index.cshtml" />
+    <Content Include="Views\Version\index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

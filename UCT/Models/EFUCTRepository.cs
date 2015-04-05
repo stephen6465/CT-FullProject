@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Principal;
 using System.Web;
 
@@ -79,6 +80,42 @@ namespace UCT.Models
             return _db.ProgramUsers.Where(pu => pu.ProgramID == programId);
         }
 
+        public IEnumerable<LearningGoals_Archive> GetArchiveLearningGoalsByVersion(int versionID)
+        {
+            return _uct.LearningGoals_Archive.Where(g => g.VersionID == versionID).ToList();
+        }
+
+        public IEnumerable<LearningGoals_Archive> GetArchiveSchoolLearningGoals()
+        {
+            return _uct.LearningGoals_Archive.ToList();
+        }
+
+        public IEnumerable<LearningActivities_Archive> GetArchiveLearningActivitiesByVersion(int versionID)
+        {
+            //throw new NotImplementedException();
+            return _uct.LearningActivities_Archive.Where(g => g.VersionID == versionID).ToList();
+        }
+
+        public IEnumerable<Competencies_LearningActivities_Archive> GetArchiveCompetencyLearningActivitiesByVersion(int versionID)
+        {
+            //throw new NotImplementedException();
+            return _uct.Competencies_LearningActivities_Archive.Where(g => g.VersionID == versionID).ToList();
+
+        }
+
+        public IEnumerable<ProgramUsers_Archive> GetArchiveProgramUsersByVersion(int versionId)
+        {
+            //throw new NotImplementedException();
+            return _uct.ProgramUsers_Archive.Where(delegate(ProgramUsers_Archive g) { return g.VersionID == versionId; }).ToList();
+
+        }
+
+        public IEnumerable<Competencies_Archive> GetArchiveCompetenciesByVersion(int versionID)
+        {
+            //throw new NotImplementedException();
+            return _uct.Competencies_Archive.Where(g => g.VersionID == versionID).ToList();
+        }
+
         public IEnumerable<UserProfile> GetUsers()
         {
             return _usersDb.UserProfiles;
@@ -94,7 +131,11 @@ namespace UCT.Models
             return _db.Programs.FirstOrDefault(p => p.ProgramID == programID);
         }
 
-        
+        public Version GetVersionByVersionName(String versionName)
+        {
+            return _uct.Versions.LastOrDefault(v => v.VersionName.ToString() == versionName);
+
+        }
         public LearningGoal GetLearningGoalByID(int learningGoalID)
         {
             return _db.LearningGoals.FirstOrDefault(lg => lg.LearningGoalID == learningGoalID);
@@ -144,11 +185,37 @@ namespace UCT.Models
         }
 
 
-        public string CreateVersion(Version version)
+        public string CreateVersion(String versionName, int programID)
         {
-            // Need to implment this
+          
+
+            var version = new Version();
+
+            var mes = string.Empty;
+
+
+            mes = CreateArcProgramLearningGoal(GetLearningGoalsByProgram(programID), version.VersionID);
+            mes = CreateArcProgramUsers(GetProgramUsersByProgram(programID), version.VersionID);
+            mes = CreateArcProgram(GetProgramByID(programID), version.VersionID);
+            mes = CreateArcLearnActivities(GetLearningActivitiesByProgram(programID), version.VersionID);
+
+
+            var learnGoals = GetLearningGoalsByProgram(programID);
+
+            foreach (var learnGoal in learnGoals)
+            {
+
+                mes = CreateArcCompetencies(GetCompetencyByLearningGoalAndPosition(learnGoal.LearningGoalID, learnGoal.Position), version.VersionID);
+            }
+
+            mes = CreateArcCompetencyLearnActivity(GetCompetencyLearningActivitiesByProgram(programID),
+                version.VersionID);
+        
             try
             {
+
+                version.ProgramID = programID;
+                version.VersionName = versionName;
                 version.ArchiveDate = DateTime.UtcNow;
                 _uct.Versions.Add(version);
                 _uct.SaveChanges();
@@ -157,10 +224,172 @@ namespace UCT.Models
             {
                 return ex.Message;
             }
+            
+            return mes;
+
+        }
+
+
+        public string CreateArcCompetencyLearnActivity(IEnumerable<CompetencyLearningActivity> competencyLearningActivities, int versionID)
+        {
+            try
+            {
+
+                foreach (var complearningArcActivity in competencyLearningActivities.Select(competencyLearningActivity => new Competencies_LearningActivities_Archive()
+                {
+                    Competency_LearningActivityID = competencyLearningActivity.CompetencyLearningActivityID,
+                    CompetencyItemID = competencyLearningActivity.CompetencyItemID,
+                    CompetencyType = (byte) competencyLearningActivity.CompetencyType,
+                    LearningActivityID = competencyLearningActivity.LearningActivityID,
+                    CreatedBy = competencyLearningActivity.CreatedBy,
+                    CreatedDateTime = competencyLearningActivity.CreatedDateTime,
+                    VersionID = versionID
+                }))
+                {
+                    _uct.Competencies_LearningActivities_Archive.Add(complearningArcActivity);
+                    _uct.SaveChanges();
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message;
+            }
 
             return string.Empty;
 
         }
+        public string CreateArcProgram(Program program, int versionID)
+        {
+            
+            try
+            {
+                var programArc = new Programs_Archive();
+                programArc.CreatedBy = program.CreatedBy;
+                programArc.CreatedDateTime = program.CreatedDateTime;
+                programArc.Description = program.Description;
+                programArc.LastModifiedBy = program.LastModifiedBy;
+                programArc.LastModifiedDateTime = program.LastModifiedDateTime;
+                programArc.VersionID = versionID;
+                _uct.Programs_Archive.Add(programArc);
+                _uct.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+            return string.Empty;
+        
+        }
+
+        public string CreateArcCompetencies(Competency competency, int versionID)
+        {
+            try
+            {
+
+                var compArc = new Competencies_Archive
+                {
+                    CompetencyID = competency.CompetencyID,
+                    LearningGoalID = competency.LearningGoalID,
+                    Description = competency.Description,
+                    Position = competency.Position,
+                    CreatedBy = competency.CreatedBy,
+                    CreatedDateTime = competency.CreatedDateTime,
+                    LastModifiedBy = competency.LastModifiedBy,
+                    LastModifiedDateTime = competency.LastModifiedDateTime,
+                    VersionID = versionID
+                };
+                _uct.Competencies_Archive.Add(compArc);
+                _uct.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message;
+            }
+
+            return string.Empty;
+
+        }
+
+        public string CreateArcLearnActivities(IEnumerable<LearningActivity> learningActivities, int versionID)
+        {
+            try
+            {
+
+                foreach (var learningArcActivity in learningActivities.Select(LearningActivity => new LearningActivities_Archive()
+                {
+                    ProgramID = LearningActivity.ProgramID,
+                    LearningActivityID = LearningActivity.LearningActivityID,
+                    Title = LearningActivity.Title,
+                    Scenario = LearningActivity.Scenario,
+                    TopicsRequired = LearningActivity.TopicsRequired,
+                    Weeks = LearningActivity.Weeks,
+                    Position = LearningActivity.Position,
+                    CreatedBy = LearningActivity.CreatedBy,
+                    CreatedDateTime = LearningActivity.CreatedDateTime,
+                    LastModifiedBy = LearningActivity.LastModifiedBy,
+                    LastModifiedDateTime = LearningActivity.LastModifiedDateTime,
+                    VersionID = versionID
+                }))
+                {
+                    _uct.LearningActivities_Archive.Add(learningArcActivity);
+                    _uct.SaveChanges();
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message;
+            }
+
+            return string.Empty;
+
+        }
+        
+        public string CreateArcProgramUsers(IEnumerable<ProgramUser> programUsers, int versionID )
+        {
+            try
+            {
+
+                foreach (var programAcrUser in programUsers.Select(programUser => new ProgramUsers_Archive()
+                {
+                    ProgramID = programUser.ProgramID,
+                    UserId = programUser.UserId,
+                    ProgramUserID = programUser.ProgramUserID,
+                    CreatedBy = programUser.CreatedBy,
+                    CreatedDateTime = programUser.CreatedDateTime,
+                    VersionID = versionID
+                }))
+                {
+                    _uct.ProgramUsers_Archive.Add(programAcrUser);
+                    _uct.SaveChanges();
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message;
+            }
+
+            return string.Empty;
+        
+        }
+
+
+
 
         public string CreateProgram(Program program)
         {
@@ -177,6 +406,41 @@ namespace UCT.Models
 
             return string.Empty;
         }
+
+
+        public string CreateArcProgramLearningGoal(IEnumerable<LearningGoal> learningGoals, int versionID)
+        {
+            
+            try
+            {
+                foreach (var learningArcGoal in learningGoals.Select(learningGoal => new LearningGoals_Archive
+                {
+                    LearningGoalID = learningGoal.LearningGoalID,
+                    LastModifiedBy = learningGoal.LastModifiedBy,
+                    LastModifiedDateTime = learningGoal.LastModifiedDateTime,
+                    Position = learningGoal.Position,
+                    CreatedBy = learningGoal.CreatedBy,
+                    CreatedDateTime = learningGoal.CreatedDateTime,
+                    Description = learningGoal.Description,
+                    Title = learningGoal.Title,
+                    ProgramID = learningGoal.ProgramID,
+                    VersionID = versionID
+                }))
+                {
+                    _uct.LearningGoals_Archive.Add(learningArcGoal);
+                    _uct.SaveChanges();
+                }                
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+            return string.Empty;
+        
+        }
+
+
 
         public string CreateProgramLearningGoal(LearningGoal learningGoal)
         {
