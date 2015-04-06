@@ -31,9 +31,10 @@ namespace UCT.Models
         public Nullable<int> LastModifiedBy { get; set; }
         public Nullable<System.DateTime> LastModifiedDateTime { get; set; }
         public Nullable<int> VersionID { get; set; }
+        public Nullable<int> OldLearningActivityID { get; set; }
     
-        public virtual ICollection<Competencies_LearningActivities_Archive> Competencies_LearningActivities_Archive { get; set; }
         public virtual Programs_Archive Programs_Archive { get; set; }
         public virtual Version Version { get; set; }
+        public virtual ICollection<Competencies_LearningActivities_Archive> Competencies_LearningActivities_Archive { get; set; }
     }
 }

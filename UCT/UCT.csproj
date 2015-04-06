@@ -277,6 +277,7 @@
     <Compile Include="ViewModels\CreateDescriptorFormViewModel.cs" />
     <Compile Include="ViewModels\CreateCompetencyFormViewModel.cs" />
     <Compile Include="ViewModels\ProgramUserViewModel.cs" />
+    <Compile Include="ViewModels\ProgramViewModel.cs" />
     <Compile Include="ViewModels\UserProfileViewModel.cs" />
     <Compile Include="ViewModels\VersionViewModel.cs" />
   </ItemGroup>

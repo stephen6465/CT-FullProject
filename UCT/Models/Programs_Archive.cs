@@ -17,8 +17,8 @@ namespace UCT.Models
         public Programs_Archive()
         {
             this.LearningActivities_Archive = new HashSet<LearningActivities_Archive>();
-            this.LearningGoals_Archive = new HashSet<LearningGoals_Archive>();
             this.ProgramUsers_Archive = new HashSet<ProgramUsers_Archive>();
+            this.LearningGoals_Archive = new HashSet<LearningGoals_Archive>();
         }
     
         public int ProgramID { get; set; }
@@ -30,8 +30,8 @@ namespace UCT.Models
         public Nullable<int> VersionID { get; set; }
     
         public virtual ICollection<LearningActivities_Archive> LearningActivities_Archive { get; set; }
-        public virtual ICollection<LearningGoals_Archive> LearningGoals_Archive { get; set; }
         public virtual ICollection<ProgramUsers_Archive> ProgramUsers_Archive { get; set; }
         public virtual Version Version { get; set; }
+        public virtual ICollection<LearningGoals_Archive> LearningGoals_Archive { get; set; }
     }
 }

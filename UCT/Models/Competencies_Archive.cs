@@ -28,9 +28,11 @@ namespace UCT.Models
         public Nullable<int> LastModifiedBy { get; set; }
         public Nullable<System.DateTime> LastModifiedDateTime { get; set; }
         public Nullable<int> VersionID { get; set; }
+        public Nullable<int> OldLearningGoalID { get; set; }
+        public int OldCompetencyID { get; set; }
     
         public virtual LearningGoals_Archive LearningGoals_Archive { get; set; }
-        public virtual ICollection<Descriptors_Archive> Descriptors_Archive { get; set; }
         public virtual Version Version { get; set; }
+        public virtual ICollection<Descriptors_Archive> Descriptors_Archive { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace UCT.Models
         public Nullable<System.DateTime> LastModifiedDateTime { get; set; }
         public Nullable<int> VersionID { get; set; }
     
-        public virtual Competencies_Archive Competencies_Archive { get; set; }
         public virtual Version Version { get; set; }
+        public virtual Competencies_Archive Competencies_Archive { get; set; }
     }
 }

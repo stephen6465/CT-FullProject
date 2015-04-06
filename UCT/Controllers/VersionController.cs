@@ -42,36 +42,41 @@ namespace UCT.Controllers
 
             var version = _repository.GetVersionByVersionName(versionName);
 
-            var viewModel = new VersionViewModel
-            {
-                LearningGoals = _repository.GetArchiveLearningGoalsByVersion(version.VersionID),
-                LearningActivities = _repository.GetArchiveLearningActivitiesByVersion(version.VersionID),
-                Competencies = _repository.GetArchiveCompetenciesByVersion(version.VersionID),
-                CompetencyLearningActivities =
-                    _repository.GetArchiveCompetencyLearningActivitiesByVersion(version.VersionID),
-                ProgramUsers = _repository.GetArchiveProgramUsersByVersion(version.VersionID)
-            };
-
-            
+            var viewModel = new VersionViewModel();
 
 
-
+            viewModel.LearningGoals = _repository.GetArchiveLearningGoalsByVersion(version.VersionID);
+            viewModel.LearningActivities = _repository.GetArchiveLearningActivitiesByVersion(version.VersionID);
+            viewModel.Competencies = _repository.GetArchiveCompetenciesByVersion(version.VersionID);
+            viewModel.CompetencyLearningActivities =
+                _repository.GetArchiveCompetencyLearningActivitiesByVersion(version.VersionID);
+            viewModel.ProgramUsers = _repository.GetArchiveProgramUsersByVersion(version.VersionID);
+            viewModel.version = version;
+            viewModel.Descriptors = _repository.GetArcDescriptorsByVersionID(version.VersionID);
+            viewModel.OldProgramID = programID;
+            viewModel.NewProgramID = _repository.GetArcProgramByVersionID(version.VersionID).ProgramID;
+            viewModel.Program = _repository.GetArcProgramByVersionID(version.VersionID);
+                
             return View("index", viewModel);
         }
 
 
-        public ActionResult Index(UCT.Models.Version version, int programID)
+        public ActionResult Index(int versionID)
         {
-            var viewModel = new VersionViewModel
-            {
-                LearningGoals = _repository.GetArchiveLearningGoalsByVersion(version.VersionID),
-                LearningActivities = _repository.GetArchiveLearningActivitiesByVersion(version.VersionID),
-                Competencies = _repository.GetArchiveCompetenciesByVersion(version.VersionID),
-                CompetencyLearningActivities =
-                    _repository.GetArchiveCompetencyLearningActivitiesByVersion(version.VersionID),
-                ProgramUsers = _repository.GetArchiveProgramUsersByVersion(version.VersionID)
-            };
-           // viewModel.UserPrograms = _repository. ;
+            var viewModel = new VersionViewModel();
+            var version = _repository.GetVersionByID(versionID);
+
+            viewModel.LearningGoals = _repository.GetArchiveLearningGoalsByVersion(version.VersionID);
+            viewModel.LearningActivities = _repository.GetArchiveLearningActivitiesByVersion(version.VersionID);
+            viewModel.Competencies = _repository.GetArchiveCompetenciesByVersion(version.VersionID);
+            viewModel.CompetencyLearningActivities =
+                _repository.GetArchiveCompetencyLearningActivitiesByVersion(version.VersionID);
+            viewModel.ProgramUsers = _repository.GetArchiveProgramUsersByVersion(version.VersionID);
+            viewModel.version = version;
+            viewModel.Descriptors = _repository.GetArcDescriptorsByVersionID(version.VersionID);
+            viewModel.OldProgramID = (int) version.ProgramID;
+            viewModel.NewProgramID = _repository.GetArcProgramByVersionID(version.VersionID).ProgramID;
+            viewModel.Program = _repository.GetArcProgramByVersionID(version.VersionID);
 
 
             return View("index",viewModel);

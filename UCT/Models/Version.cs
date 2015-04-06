@@ -7,8 +7,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
-
 namespace UCT.Models
 {
     using System;
@@ -18,29 +16,26 @@ namespace UCT.Models
     {
         public Version()
         {
-            this.Competencies_Archive = new HashSet<Competencies_Archive>();
-            this.Competencies_LearningActivities_Archive = new HashSet<Competencies_LearningActivities_Archive>();
             this.Descriptors_Archive = new HashSet<Descriptors_Archive>();
             this.LearningActivities_Archive = new HashSet<LearningActivities_Archive>();
-            this.LearningGoals_Archive = new HashSet<LearningGoals_Archive>();
             this.Programs_Archive = new HashSet<Programs_Archive>();
             this.ProgramUsers_Archive = new HashSet<ProgramUsers_Archive>();
+            this.LearningGoals_Archive = new HashSet<LearningGoals_Archive>();
+            this.Competencies_Archive = new HashSet<Competencies_Archive>();
+            this.Competencies_LearningActivities_Archive = new HashSet<Competencies_LearningActivities_Archive>();
         }
     
         public int VersionID { get; set; }
-
-        [Required(ErrorMessage = "Version Name is required")]
-        [Display(Name = "Version Name")]
         public string VersionName { get; set; }
         public Nullable<int> ProgramID { get; set; }
         public System.DateTime ArchiveDate { get; set; }
     
-        public virtual ICollection<Competencies_Archive> Competencies_Archive { get; set; }
-        public virtual ICollection<Competencies_LearningActivities_Archive> Competencies_LearningActivities_Archive { get; set; }
         public virtual ICollection<Descriptors_Archive> Descriptors_Archive { get; set; }
         public virtual ICollection<LearningActivities_Archive> LearningActivities_Archive { get; set; }
-        public virtual ICollection<LearningGoals_Archive> LearningGoals_Archive { get; set; }
         public virtual ICollection<Programs_Archive> Programs_Archive { get; set; }
         public virtual ICollection<ProgramUsers_Archive> ProgramUsers_Archive { get; set; }
+        public virtual ICollection<LearningGoals_Archive> LearningGoals_Archive { get; set; }
+        public virtual ICollection<Competencies_Archive> Competencies_Archive { get; set; }
+        public virtual ICollection<Competencies_LearningActivities_Archive> Competencies_LearningActivities_Archive { get; set; }
     }
 }

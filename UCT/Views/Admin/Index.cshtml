@@ -7,7 +7,7 @@
 
 <h2>Create New Version</h2>
 
-@using (Html.BeginForm("Index", "Version", FormMethod.Post, new { VersionName = Model.VersionName }))
+@using (Html.BeginForm("Create", "Version", FormMethod.Post, new { VersionName = Model.VersionName, programID = Model.ProgramID}))
 {
     <div style="float:left;">
         <label style="display:inline;padding-right:15px;">Select Program:</label>@Html.DropDownListFor(x => x.ProgramID, new SelectList(Model.UserPrograms, "ProgramID", "Description", Model.ProgramID))

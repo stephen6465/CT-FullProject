@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using UCT.Models;
+using UCT.ViewModels;
 using WebMatrix.WebData;
 using UCT.Filters;
 using System.Security.Principal;
@@ -33,7 +34,11 @@ namespace UCT.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            return View(_repository.GetAllPrograms().ToList());
+            var viewModel = new ProgramViewModel();
+            viewModel.programs = _repository.GetAllPrograms().ToList();
+            viewModel.versions = _repository.GetAllVersions().ToList();
+
+            return View("Index", viewModel);
         }
 
         //

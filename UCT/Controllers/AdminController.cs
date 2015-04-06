@@ -35,7 +35,7 @@ namespace UCT.Controllers
             viewModel.UserProfiles = _repository.GetUsers();
             viewModel.UserPrograms = _repository.GetAllPrograms();
             
-            //Fix this here and send the ViewModel to the View and this is done... 
+         
             return View("Index", viewModel);
         }
 

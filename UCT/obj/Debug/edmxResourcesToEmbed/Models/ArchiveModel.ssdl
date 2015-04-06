@@ -13,6 +13,8 @@
     <Property Name="LastModifiedBy" Type="int" />
     <Property Name="LastModifiedDateTime" Type="datetime" />
     <Property Name="VersionID" Type="int" />
+    <Property Name="OldLearningGoalID" Type="int" />
+    <Property Name="OldCompetencyID" Type="int" />
   </EntityType>
   <EntityType Name="Competencies_LearningActivities_Archive">
     <Key>
@@ -25,6 +27,8 @@
     <Property Name="CreatedBy" Type="int" Nullable="false" />
     <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
     <Property Name="VersionID" Type="int" />
+    <Property Name="OldCompetency_LearningActivityID" Type="int" />
+    <Property Name="OldCompetencyItemID" Type="int" />
   </EntityType>
   <EntityType Name="Descriptors_Archive">
     <Key>
@@ -56,6 +60,7 @@
     <Property Name="LastModifiedBy" Type="int" />
     <Property Name="LastModifiedDateTime" Type="datetime" />
     <Property Name="VersionID" Type="int" />
+    <Property Name="OldLearningActivityID" Type="int" />
   </EntityType>
   <EntityType Name="LearningGoals_Archive">
     <Key>
@@ -71,6 +76,7 @@
     <Property Name="LastModifiedBy" Type="int" />
     <Property Name="LastModifiedDateTime" Type="datetime" />
     <Property Name="VersionID" Type="int" />
+    <Property Name="OldLearningGoalID" Type="int" />
   </EntityType>
   <EntityType Name="Programs_Archive">
     <Key>
@@ -99,7 +105,7 @@
     <Key>
       <PropertyRef Name="VersionID" />
     </Key>
-    <Property Name="VersionID" Type="int" Nullable="false" />
+    <Property Name="VersionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="VersionName" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="ProgramID" Type="int" />
     <Property Name="ArchiveDate" Type="datetime" Nullable="false" />

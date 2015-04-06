@@ -21,6 +21,8 @@ namespace UCT.Models
         public int CreatedBy { get; set; }
         public System.DateTime CreatedDateTime { get; set; }
         public Nullable<int> VersionID { get; set; }
+        public Nullable<int> OldCompetency_LearningActivityID { get; set; }
+        public Nullable<int> OldCompetencyItemID { get; set; }
     
         public virtual LearningActivities_Archive LearningActivities_Archive { get; set; }
         public virtual Version Version { get; set; }
