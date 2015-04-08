@@ -19,8 +19,15 @@
         <EntityTypeShape EntityType="UCTModel1.LearningGoals_Archive" Width="1.5" PointX="10.25" PointY="13.875" />
         <AssociationConnector Association="UCTModel1.FK_LearningGoals_Archive_Program_Archive" />
         <AssociationConnector Association="UCTModel1.FK_LearningGoals_Archive_Version" />
-        <EntityTypeShape EntityType="UCTModel1.Competencies_Archive" Width="1.5" PointX="3.375" PointY="9.5" />
-        <AssociationConnector Association="UCTModel1.FK_Competencies_Archive_LearningGoals_Archive" />
+        <EntityTypeShape EntityType="UCTModel1.Competencies_Archive" Width="1.5" PointX="11" PointY="9.25" />
+        <AssociationConnector Association="UCTModel1.FK_Competencies_Archive_LearningGoals_Archive" ManuallyRouted="true" >
+          <ConnectorPoint PointX="11.375" PointY="13.875" />
+          <ConnectorPoint PointX="11.375" PointY="13.57337978515625" />
+          <ConnectorPoint PointX="11.75" PointY="13.57337978515625" />
+          <ConnectorPoint PointX="11.75" PointY="13.262619563802083" />
+          <ConnectorPoint PointX="11.375" PointY="13.262619563802083" />
+          <ConnectorPoint PointX="11.375" PointY="12.960999348958334" />
+        </AssociationConnector>
         <AssociationConnector Association="UCTModel1.FK_Competencies_Archive_Version" />
         <AssociationConnector Association="UCTModel1.FK_Descriptors_Archive_Competencies_Archive" />
         <EntityTypeShape EntityType="UCTModel1.Competencies_LearningActivities_Archive" Width="1.5" PointX="5.875" PointY="9.875" />

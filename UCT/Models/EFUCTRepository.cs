@@ -185,7 +185,7 @@ namespace UCT.Models
             return _uct.Descriptors_Archive.Where(d => d.VersionID == versionID).ToList();
         }
 
-        public IEnumerable<Descriptor> GetDescriptorsByCompetency (int compID)
+        public IEnumerable<Descriptor> GetDescriptorsByCompetency (int? compID)
         {
             return _db.Descriptors.Where(d => d.CompetencyID == compID).ToList();
 
@@ -224,7 +224,7 @@ namespace UCT.Models
             return _db.Competencies.Where(c =>c.LearningGoalID == learningGoalID).ToList();
         }
 
-        public IEnumerable<CompetencyLearningActivity> GetCompetencyLearningActivitiesByCompetencyID(int compID)
+        public IEnumerable<CompetencyLearningActivity> GetCompetencyLearningActivitiesByCompetencyID(int? compID)
         {
             return _db.CompetencyLearningActivities.Where(ca => ca.CompetencyItemID == compID).ToList();
 
@@ -287,6 +287,9 @@ namespace UCT.Models
                 var descriptors = GetDescriptorsByCompetency(competency.OldCompetencyID);
                 mes = CreateArcDescriptors(descriptors, version.VersionID);
             }
+
+            _uct.LearningGoals_Archive.Include("Competencies_Archive");
+
 
          return mes;
 
@@ -576,6 +579,7 @@ namespace UCT.Models
                     VersionID = versionID
                 }))
                 {
+                   
                     _uct.LearningGoals_Archive.Add(learningArcGoal);
                     _uct.SaveChanges();
                 }                

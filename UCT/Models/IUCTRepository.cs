@@ -39,7 +39,7 @@ namespace UCT.Models
         LearningActivity GetLearningActivityByProgramAndPosition(int programID, short position);
         Version GetVersionByVersionName(string versionName);
         Descriptors_Archive GetArcDescriptorByID(int descriptorID);
-        IEnumerable<Descriptor> GetDescriptorsByCompetency(int compID);
+        IEnumerable<Descriptor> GetDescriptorsByCompetency(int? compID);
         IEnumerable<Descriptors_Archive> GetArcDescriptorsByVersionID(int versionID);
         Programs_Archive GetArcProgramByVersionID(int versionID);
         IEnumerable<Competency> GetCompetencyByLearningGoal(int learningGoalID);
