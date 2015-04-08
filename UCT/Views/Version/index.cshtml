@@ -59,3 +59,59 @@
     {
 <label>There are currently no Learning Goals for this Program.</label>
     }
+
+<br/>
+<br />
+<h2>Learning Goals</h2>
+@if (Model.LearningActivities.Where(la => la.VersionID == Model.version.VersionID).Count() > 0)
+    {
+<table>
+    <tr>
+        @*<th>
+                @Html.DisplayNameFor(model => model.LearningActivityID)
+            </th>*@
+        <th style="padding-right:10px;">
+            Number
+        </th>
+        <th>
+            Title
+        </th>
+        <th>
+            Scenario
+        </th>
+        <th>
+            Required Topics
+        </th>
+        <th>
+            Weeks
+        </th>
+        <th style="white-space:nowrap;text-align:center;">Actions</th>
+    </tr>
+
+    @foreach (var item in Model.LearningActivities.Where(la => la.VersionID == Model.version.VersionID).OrderBy(la=> la.Position))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Position)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Scenario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TopicsRequired)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Weeks)
+            </td>
+        </tr>
+    }
+</table>
+
+    }
+    else
+    {
+<label>There are currently no Learning Activities for this Programs Version.</label>
+    }

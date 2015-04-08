@@ -143,9 +143,9 @@ namespace UCT.Models
 
         }
 
-        public int GetNewLearningID(int learningGoalID )
+        public int GetNewLearningID(int learningGoalID, int versionID )
         {
-            return _uct.LearningGoals_Archive.FirstOrDefault(lg => lg.OldLearningGoalID == learningGoalID).LearningGoalID;
+            return _uct.LearningGoals_Archive.Where(lg => lg.VersionID == versionID).FirstOrDefault(lgID => lgID.OldLearningGoalID == learningGoalID).LearningGoalID;
 
         }
 
@@ -156,9 +156,9 @@ namespace UCT.Models
                     .LearningActivityID;
         }
 
-        public int GetNewCompetencyItemID(int OldCompItemID)
+        public int GetNewCompetencyItemID(int OldCompItemID, int versionID)
         {
-            return _uct.Competencies_Archive.FirstOrDefault(ci => ci.OldCompetencyID == OldCompItemID).CompetencyID;
+            return _uct.Competencies_Archive.Where(cg => cg.VersionID == versionID).FirstOrDefault(ci => ci.OldCompetencyID == OldCompItemID).CompetencyID;
         }
         public LearningGoal GetLearningGoalByID(int learningGoalID)
         {
@@ -288,7 +288,7 @@ namespace UCT.Models
                 mes = CreateArcDescriptors(descriptors, version.VersionID);
             }
 
-            _uct.LearningGoals_Archive.Include("Competencies_Archive");
+          //  _uct.LearningGoals_Archive.Include("Competencies_Archive");
 
 
          return mes;
@@ -307,7 +307,7 @@ namespace UCT.Models
 
                     arcCompLearnAct.OldCompetency_LearningActivityID = competencyLearningActivity.CompetencyItemID;
                     arcCompLearnAct.CompetencyItemID =
-                        GetNewCompetencyItemID(competencyLearningActivity.CompetencyItemID);
+                        GetNewCompetencyItemID(competencyLearningActivity.CompetencyItemID ,  versionID);
                     arcCompLearnAct.OldCompetencyItemID = competencyLearningActivity.CompetencyItemID;
                     arcCompLearnAct.CompetencyType = (byte) competencyLearningActivity.CompetencyType;
                     arcCompLearnAct.LearningActivityID =
@@ -345,7 +345,7 @@ namespace UCT.Models
                 {
                     var descArc = new Descriptors_Archive();
 
-                    descArc.CompetencyID = GetNewCompetencyItemID(descriptor.CompetencyID);
+                    descArc.CompetencyID = GetNewCompetencyItemID(descriptor.CompetencyID, versionID);
                     descArc.Description = descriptor.Description;
                     descArc.Position = descriptor.Position;
                     descArc.CreatedBy = descriptor.CreatedBy;
@@ -405,7 +405,7 @@ namespace UCT.Models
                     {
                         OldCompetencyID = competency.CompetencyID, 
                         OldLearningGoalID = competency.LearningGoalID,
-                        LearningGoalID = GetNewLearningID(competency.LearningGoalID),
+                        LearningGoalID = GetNewLearningID(competency.LearningGoalID, versionID),
                         Description = competency.Description,
                         Position = competency.Position,
                         CreatedBy = competency.CreatedBy,

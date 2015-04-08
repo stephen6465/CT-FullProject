@@ -31,10 +31,7 @@ namespace UCT.Models
         public Nullable<int> LastModifiedBy { get; set; }
         public Nullable<System.DateTime> LastModifiedDateTime { get; set; }
         public Nullable<int> VersionID { get; set; }
-
-        //[InverseProperty("")]
         public int OldLearningGoalID { get; set; }
-    
         public virtual Programs_Archive Programs_Archive { get; set; }
         public virtual Version Version { get; set; }
         public virtual ICollection<Competencies_Archive> Competencies_Archive { get; set; }

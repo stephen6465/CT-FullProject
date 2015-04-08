@@ -43,10 +43,11 @@ namespace UCT.Models
         IEnumerable<Descriptors_Archive> GetArcDescriptorsByVersionID(int versionID);
         Programs_Archive GetArcProgramByVersionID(int versionID);
         IEnumerable<Competency> GetCompetencyByLearningGoal(int learningGoalID);
-        IEnumerable<LearningGoals_Archive>GetLearningGoalsByVersionID(int versionID); 
-        int GetNewLearningID(int learningGoalID);
+        IEnumerable<LearningGoals_Archive>GetLearningGoalsByVersionID(int versionID);
+        int GetNewLearningID(int learningGoalID, int versionID);
         int GetNewLearningActivityID(int learningActivityID);
 
+        int GetNewCompetencyItemID(int OldCompItemID, int versionID);
 
         string CreateProgram(Program program);
         string CreateProgramLearningGoal(LearningGoal learningGoal);
