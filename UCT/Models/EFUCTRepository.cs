@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Security.Principal;
 using System.Web;
 using DocumentFormat.OpenXml.Drawing.Charts;
@@ -295,6 +296,32 @@ namespace UCT.Models
 
         }
 
+
+        //public List<LearningGoal> ConvertArcToLearningGoals(
+        //    IEnumerable<LearningGoals_Archive> arcLearningGoals)
+        //{
+        //    List<LearningGoal> learningGoals = new List<LearningGoal>();
+            
+            
+
+
+        //    foreach (var arcLearningGoal in arcLearningGoals)
+        //    {
+        //        var tempLearningGoal = new LearningGoal();
+
+        //        tempLearningGoal.LearningGoalID = arcLearningGoal.LearningGoalID;
+        //        // Fix this piece
+        //        //tempLearningGoal.LearningGoalNumber = arcLearningGoal.Position.ToString();
+        //        tempLearningGoal.LastModifiedBy = arcLearningGoal.LastModifiedBy;
+        //        tempLearningGoal.LastModifiedDateTime = arcLearningGoal.LastModifiedDateTime;
+        //        tempLearningGoal.Position = arcLearningGoal.Position;
+        //        tempLearningGoal.Program = 
+
+
+        //    }
+
+        //    return learningGoals;
+        //} 
 
         public string CreateArcCompetencyLearnActivity(IEnumerable<CompetencyLearningActivity> competencyLearningActivities, int versionID)
         {

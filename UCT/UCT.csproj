@@ -243,6 +243,7 @@
       <DependentUpon>ArchiveModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EFUCTRepository.cs" />
+    <Compile Include="Models\ExcelArcReportGenerator.cs" />
     <Compile Include="Models\IUCTRepository.cs" />
     <Compile Include="Models\LearningActivities_Archive.cs">
       <DependentUpon>ArchiveModel.tt</DependentUpon>
