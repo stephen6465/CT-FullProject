@@ -75,7 +75,7 @@ namespace UCT.Controllers
             var viewModel = new VersionViewModel();
             var version = _repository.GetVersionByID(versionID);
             UserProfile userProfile = _repository.GetUserProfileByID(userId);
-            ExcelArcReportGenerator generator = new ExcelArcReportGenerator(viewModel.Program.Description, userProfile.UserName);
+            
 
             viewModel.LearningGoals = _repository.GetArchiveLearningGoalsByVersion(version.VersionID);
             viewModel.LearningActivities = _repository.GetArchiveLearningActivitiesByVersion(version.VersionID);
@@ -88,12 +88,15 @@ namespace UCT.Controllers
             viewModel.OldProgramID = (int)version.ProgramID;
             viewModel.NewProgramID = _repository.GetArcProgramByVersionID(version.VersionID).ProgramID;
             viewModel.Program = _repository.GetArcProgramByVersionID(version.VersionID);
+            
+            ExcelArcReportGenerator generator = new ExcelArcReportGenerator(viewModel.Program.Description, userProfile.UserName);
 
 
             //Program program = _repository.GetProgramByID(programID);
            
-            //List<LearningGoal> learningGoals = new List<LearningGoal>();
-            //learningGoals.AddRange(_repository.GetSchoolLearningGoals());
+            List<LearningGoals_Archive> learningGoals = new List<LearningGoals_Archive>();
+
+            //learningGoals.AddRange(viewModel.LearningGoals.ToList());
             //learningGoals.AddRange(_repository.GetLearningGoalsByProgram(programID));
             viewModel.LearningGoals.OrderBy(g => g.Position);
            // List<LearningActivity> learningActivities = _repository.GetLearningActivitiesByProgram(programID).OrderBy(g => g.Position).ToList();
@@ -103,7 +106,8 @@ namespace UCT.Controllers
             //List<CompetencyLearningActivity> competencyLearningActivities = _repository.GetCompetencyLearningActivitiesByProgram(programID).ToList();
 
             //Change these to list and pass to the method
-            byte[] reportBytes = generator.GenerateCompetencyLearningActivitiesReport(viewModel.LearningGoals, viewModel.LearningActivities,viewModel.CompetencyLearningActivities, viewModel.Competencies, viewModel.Descriptors );
+
+            byte[] reportBytes = generator.GenerateCompetencyLearningActivitiesReport(viewModel.LearningGoals.OrderBy(v => v.Position).ToList(), viewModel.LearningActivities.OrderBy(v => v.Position).ToList(), viewModel.CompetencyLearningActivities.ToList(), viewModel.Competencies.OrderBy(v => v.Position).ToList(), viewModel.Descriptors.OrderBy(v => v.Position).ToList());
 
             DateTime currentTimestamp = DateTime.Now;
             var cd = new System.Net.Mime.ContentDisposition

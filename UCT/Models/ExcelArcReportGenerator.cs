@@ -522,7 +522,7 @@ namespace UCT.Models
         {
             SharedStringTable sharedStringTable1 = new SharedStringTable() { Count = (UInt32Value)53U, UniqueCount = (UInt32Value)41U };
 
-            AddLearningActivityReportHeaders(sharedStringTable1);
+            AddLearningActivityReportHeaders(sharedStringTable1, string.Empty);
 
             AddLearningActivitiesUniqueStrings(sharedStringTable1, programLearningActivities);
 
@@ -1401,7 +1401,7 @@ namespace UCT.Models
             GenerateCompetencyLearningActivitySharedStringTablePart1Content(sharedStringTablePart1, learningGoals, programLearningActivities, compsArchives, descriptorsArchives );
 
             WorksheetPart worksheetPart1 = workbookPart1.AddNewPart<WorksheetPart>("rId1");
-            GenerateCompetencyLearningActivityWorksheetPart1Content(worksheetPart1, learningGoals, programLearningActivities, competencyLearningActivities);
+            GenerateCompetencyLearningActivityWorksheetPart1Content(worksheetPart1, learningGoals, programLearningActivities, competencyLearningActivities, compsArchives, descriptorsArchives);
 
             WorksheetPart worksheetPart2 = workbookPart1.AddNewPart<WorksheetPart>("rId2");
             GenerateCompetencyLearningActivityWorksheetPart2Content(worksheetPart2, programLearningActivities);
@@ -2424,9 +2424,9 @@ namespace UCT.Models
         private void GenerateCompetencyLearningActivitySharedStringTablePart1Content(SharedStringTablePart sharedStringTablePart1, List<LearningGoals_Archive> learningGoals, List<LearningActivities_Archive> programLearningActivities, List<Competencies_Archive> compsArchives, List<Descriptors_Archive> descriptorsArchives)
         {
             SharedStringTable sharedStringTable1 = new SharedStringTable() { Count = (UInt32Value)404U, UniqueCount = (UInt32Value)391U };
-
+            
             //Learning Activities Report Fixed Strings
-            AddLearningActivityReportHeaders(sharedStringTable1);
+            AddLearningActivityReportHeaders(sharedStringTable1, string.Empty );
             
             //CompetencyLearningActivities Report Fixed Strings
             AddCompetencyLearningActivitiesReportHeaders(sharedStringTable1);
@@ -2442,7 +2442,7 @@ namespace UCT.Models
                     index = AddSharedString(sharedStringTable1, competency.Description).Value;
                     propertyToSharedStrings.Add(string.Format(PROPERTY_KEY_COMPETENCY_DESC_FORMAT, competency.CompetencyID), (int)index);
 
-                    foreach (var descriptor in descriptorsArchives.OrderBy(j => j.Position))
+                    foreach (var descriptor in descriptorsArchives.Where( d => d.CompetencyID == competency.CompetencyID).OrderBy(j => j.Position))
                     {
                         index = AddSharedString(sharedStringTable1, descriptor.Position.ToString()).Value;
                         propertyToSharedStrings.Add(string.Format(PROPERTY_KEY_DESCRIPTOR_NUMBER_FORMAT, descriptor.DescriptorID), (int)index); 
@@ -2460,7 +2460,7 @@ namespace UCT.Models
         }
 
         // Generates content of worksheetPart1.
-        private void GenerateCompetencyLearningActivityWorksheetPart1Content(WorksheetPart worksheetPart1, List<LearningGoals_Archive> learningGoals, List<LearningActivities_Archive> programLearningActivities, List<Competencies_LearningActivities_Archive> competencyLearningActivities)
+        private void GenerateCompetencyLearningActivityWorksheetPart1Content(WorksheetPart worksheetPart1, List<LearningGoals_Archive> learningGoals, List<LearningActivities_Archive> programLearningActivities, List<Competencies_LearningActivities_Archive> competencyLearningActivities, List<Competencies_Archive> compsArchives, List<Descriptors_Archive> descriptorsArchives)
         {
             List<MergeCell> mergedCells = new List<MergeCell>();
             Worksheet worksheet1 = new Worksheet() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "x14ac" } };
@@ -2474,9 +2474,29 @@ namespace UCT.Models
             sheetProperties1.Append(tabColor1);
             int totalRowCount = (learningGoals.Count + 5);
 
-            ///fix this and other errors use back button - from here on down fix functions and then the call and done.... maybe!
-            learningGoals.ForEach(lg => totalRowCount += lg.Competencies.Count);
-            learningGoals.ForEach(lg => lg.Competencies.ToList().ForEach(c => totalRowCount += c.Descriptors.Count));
+          
+            foreach (var learningGoalArc in learningGoals)
+            {
+                foreach (var compArh in compsArchives.Where(c => c.LearningGoalID == learningGoalArc.LearningGoalID))
+                {
+                    totalRowCount +=1 ;
+                }
+            }
+
+            foreach (var learningGoalArc in learningGoals)
+            {
+                foreach (var compArh in compsArchives.Where(c => c.LearningGoalID == learningGoalArc.LearningGoalID))
+                {
+                    foreach (var descripArc in descriptorsArchives)
+                    {
+                        totalRowCount += 1;    
+                    }
+                    
+                }
+            }
+
+
+           // learningGoals.ForEach(lg => lg.Competencies.ToList().ForEach(c => totalRowCount += c.Descriptors.Count));
             SheetDimension sheetDimension1 = new SheetDimension() { Reference = string.Concat("A1:N", totalRowCount.ToString()) };
 
             SheetViews sheetViews1 = new SheetViews();
@@ -2637,7 +2657,7 @@ namespace UCT.Models
 
                     //If a competencyLearningActivity exists for this Learning Goal and LearningActivity
                     if(competencyLearningActivities.FirstOrDefault(r => r.CompetencyItemID == learningGoal.LearningGoalID && 
-                                                                        r.CompetencyType.Equals(UCT.Models.CompetencyType.LearningGoal) &&
+                                                                        r.CompetencyType == 1 &&
                                                                         r.LearningActivityID == learningActivity.LearningActivityID) != null)                    
                     {
                         CellValue learningGoalAssociateCellValue = new CellValue();
@@ -2649,103 +2669,180 @@ namespace UCT.Models
 
                 //Add to Sheet
                 sheetData1.Append(learningGoalRow);
+                
 
-                foreach (Competency competency in learningGoal.Competencies)
-                {
-                    currentRowIndex++;
-                    Row competencyRow = new Row() { RowIndex = (UInt32Value)currentRowIndex, Spans = new ListValue<StringValue>() { InnerText = string.Concat("1:", columnCount) }, Height = 14D, CustomHeight = true, OutlineLevel = 1 };
-                    Cell competencyCell = new Cell() { CellReference = string.Format("A{0}", currentRowIndex), StyleIndex = (UInt32Value)14U };
 
-                    Cell competencyNumberCell = new Cell() { CellReference = string.Format("B{0}", currentRowIndex), StyleIndex = (UInt32Value)14U };
-                    CellValue competencyNumberCellValue = new CellValue();
-                    competencyNumberCellValue.Text = competency.CompetencyNumber.TrimEnd('.');
-                    competencyNumberCell.Append(competencyNumberCellValue);
-
-                    Cell competencyDescCell = new Cell() { CellReference = string.Format("C{0}", currentRowIndex), StyleIndex = (UInt32Value)15U, DataType = CellValues.SharedString };
-                    CellValue competencyDescCellValue = new CellValue();
-                    entry = propertyToSharedStrings.FirstOrDefault(pss => pss.Key.Equals(string.Format(PROPERTY_KEY_COMPETENCY_DESC_FORMAT, competency.CompetencyID)));
-                    competencyDescCellValue.Text = entry.Value.ToString();
-                    competencyDescCell.Append(competencyDescCellValue);
-
-                    Cell competencyEmptyCell = new Cell() { CellReference = string.Format("D{0}", currentRowIndex), StyleIndex = (UInt32Value)15U };
-                    mergedCells.Add(new MergeCell() { Reference = string.Format("C{0}:D{1}", currentRowIndex, currentRowIndex) });
-
-                    competencyRow.Append(competencyCell);
-                    competencyRow.Append(competencyNumberCell);
-                    competencyRow.Append(competencyDescCell);
-                    competencyRow.Append(competencyEmptyCell);
-
-                    //Loop for learning activities count
-                    column = 'D';
-                    foreach (LearningActivity learningActivity in programLearningActivities)
-                    {
-                        column++;
-                        Cell competencyAssociateCell = new Cell() { CellReference = string.Format("{0}{1}", column, currentRowIndex), StyleIndex = (UInt32Value)2U, DataType = CellValues.SharedString };
-
-                        //If a competencyLearningActivity exists for this Competency and LearningActivity
-                        if (competencyLearningActivities.FirstOrDefault(r => r.CompetencyItemID == competency.CompetencyID &&
-                                                                             r.CompetencyType.Equals(CompetencyType.Competency) &&
-                                                                             r.LearningActivityID == learningActivity.LearningActivityID) != null)
-                        {
-                            CellValue competencyAssociateCellValue = new CellValue();
-                            competencyAssociateCellValue.Text = "12";
-                            competencyAssociateCell.Append(competencyAssociateCellValue);
-                        }
-                        competencyRow.Append(competencyAssociateCell);
-                    }
-
-                    //Add to Sheet
-                    sheetData1.Append(competencyRow);
-
-                    foreach (Descriptor descriptor in competency.Descriptors)
+                    foreach (var competency in compsArchives.Where(c => c.LearningGoalID == learningGoal.LearningGoalID))
                     {
                         currentRowIndex++;
-                        Row descriptorRow = new Row() { RowIndex = (UInt32Value)currentRowIndex, Spans = new ListValue<StringValue>() { InnerText = string.Concat("1:", columnCount) }, OutlineLevel = 2 };
-                        Cell descriptorFirstCell = new Cell() { CellReference = string.Format("A{0}", currentRowIndex), StyleIndex = (UInt32Value)14U };
-                        Cell descriptorSecondCell = new Cell() { CellReference = string.Format("B{0}", currentRowIndex), StyleIndex = (UInt32Value)14U };
+                        Row competencyRow = new Row()
+                        {
+                            RowIndex = (UInt32Value) currentRowIndex,
+                            Spans = new ListValue<StringValue>() {InnerText = string.Concat("1:", columnCount)},
+                            Height = 14D,
+                            CustomHeight = true,
+                            OutlineLevel = 1
+                        };
+                        Cell competencyCell = new Cell()
+                        {
+                            CellReference = string.Format("A{0}", currentRowIndex),
+                            StyleIndex = (UInt32Value) 14U
+                        };
 
-                        Cell descriptorNumberCell = new Cell() { CellReference = string.Format("C{0}", currentRowIndex), StyleIndex = (UInt32Value)14U, DataType = CellValues.SharedString };
-                        CellValue descriptorNumberCellValue = new CellValue();
-                        entry = propertyToSharedStrings.FirstOrDefault(pss => pss.Key.Equals(string.Format(PROPERTY_KEY_DESCRIPTOR_NUMBER_FORMAT, descriptor.DescriptorID)));
-                        descriptorNumberCellValue.Text = entry.Value.ToString();
+                        Cell competencyNumberCell = new Cell()
+                        {
+                            CellReference = string.Format("B{0}", currentRowIndex),
+                            StyleIndex = (UInt32Value) 14U
+                        };
+                        CellValue competencyNumberCellValue = new CellValue();
+                        competencyNumberCellValue.Text = competency.Position.ToString();
+                        competencyNumberCell.Append(competencyNumberCellValue);
 
-                        descriptorNumberCell.Append(descriptorNumberCellValue);
+                        Cell competencyDescCell = new Cell()
+                        {
+                            CellReference = string.Format("C{0}", currentRowIndex),
+                            StyleIndex = (UInt32Value) 15U,
+                            DataType = CellValues.SharedString
+                        };
+                        CellValue competencyDescCellValue = new CellValue();
+                        entry =
+                            propertyToSharedStrings.FirstOrDefault(
+                                pss =>
+                                    pss.Key.Equals(string.Format(PROPERTY_KEY_COMPETENCY_DESC_FORMAT,
+                                        competency.CompetencyID)));
+                        competencyDescCellValue.Text = entry.Value.ToString();
+                        competencyDescCell.Append(competencyDescCellValue);
 
-                        Cell descriptorDescCell = new Cell() { CellReference = string.Format("D{0}", currentRowIndex), StyleIndex = (UInt32Value)13U, DataType = CellValues.SharedString };
-                        CellValue descriptorDescCellValue = new CellValue();
-                        entry = propertyToSharedStrings.FirstOrDefault(pss => pss.Key.Equals(string.Format(PROPERTY_KEY_DESCRIPTOR_DESC_FORMAT, descriptor.DescriptorID)));
-                        descriptorDescCellValue.Text = entry.Value.ToString();
+                        Cell competencyEmptyCell = new Cell()
+                        {
+                            CellReference = string.Format("D{0}", currentRowIndex),
+                            StyleIndex = (UInt32Value) 15U
+                        };
+                        mergedCells.Add(new MergeCell()
+                        {
+                            Reference = string.Format("C{0}:D{1}", currentRowIndex, currentRowIndex)
+                        });
 
-                        descriptorDescCell.Append(descriptorDescCellValue);
-
-                        descriptorRow.Append(descriptorFirstCell);
-                        descriptorRow.Append(descriptorSecondCell);
-                        descriptorRow.Append(descriptorNumberCell);
-                        descriptorRow.Append(descriptorDescCell);
+                        competencyRow.Append(competencyCell);
+                        competencyRow.Append(competencyNumberCell);
+                        competencyRow.Append(competencyDescCell);
+                        competencyRow.Append(competencyEmptyCell);
 
                         //Loop for learning activities count
                         column = 'D';
-                        foreach (LearningActivity learningActivity in programLearningActivities)
+                        foreach (var learningActivity in programLearningActivities)
                         {
                             column++;
-                            Cell descriptorAssociateCell = new Cell() { CellReference = string.Format("{0}{1}", column, currentRowIndex), StyleIndex = (UInt32Value)2U, DataType = CellValues.SharedString };
-
-                            //If a competencyLearningActivity exists for this Descriptor and LearningActivity
-                            if (competencyLearningActivities.FirstOrDefault(r => r.CompetencyItemID == descriptor.DescriptorID &&
-                                                                                 r.CompetencyType.Equals(CompetencyType.Descriptor) &&
-                                                                                 r.LearningActivityID == learningActivity.LearningActivityID) != null)
+                            Cell competencyAssociateCell = new Cell()
                             {
-                                CellValue descriptorAssociateCellValue = new CellValue();
-                                descriptorAssociateCellValue.Text = "12";
-                                descriptorAssociateCell.Append(descriptorAssociateCellValue);
+                                CellReference = string.Format("{0}{1}", column, currentRowIndex),
+                                StyleIndex = (UInt32Value) 2U,
+                                DataType = CellValues.SharedString
+                            };
+
+                            //If a competencyLearningActivity exists for this Competency and LearningActivity
+                            if (competencyLearningActivities.FirstOrDefault(
+                                r => r.CompetencyItemID == competency.CompetencyID &&
+                                     r.CompetencyType == 2 &&
+                                     r.LearningActivityID == learningActivity.LearningActivityID) != null)
+                            {
+                                CellValue competencyAssociateCellValue = new CellValue();
+                                competencyAssociateCellValue.Text = "12";
+                                competencyAssociateCell.Append(competencyAssociateCellValue);
                             }
-                            descriptorRow.Append(descriptorAssociateCell);
+                            competencyRow.Append(competencyAssociateCell);
                         }
 
                         //Add to Sheet
-                        sheetData1.Append(descriptorRow);
+                        sheetData1.Append(competencyRow);
+
+                        foreach (var descriptor in descriptorsArchives.Where(c=> c.CompetencyID == competency.CompetencyID) )
+                        {
+                            currentRowIndex++;
+                            Row descriptorRow = new Row()
+                            {
+                                RowIndex = (UInt32Value) currentRowIndex,
+                                Spans = new ListValue<StringValue>() {InnerText = string.Concat("1:", columnCount)},
+                                OutlineLevel = 2
+                            };
+                            Cell descriptorFirstCell = new Cell()
+                            {
+                                CellReference = string.Format("A{0}", currentRowIndex),
+                                StyleIndex = (UInt32Value) 14U
+                            };
+                            Cell descriptorSecondCell = new Cell()
+                            {
+                                CellReference = string.Format("B{0}", currentRowIndex),
+                                StyleIndex = (UInt32Value) 14U
+                            };
+
+                            Cell descriptorNumberCell = new Cell()
+                            {
+                                CellReference = string.Format("C{0}", currentRowIndex),
+                                StyleIndex = (UInt32Value) 14U,
+                                DataType = CellValues.SharedString
+                            };
+                            CellValue descriptorNumberCellValue = new CellValue();
+                            entry =
+                                propertyToSharedStrings.FirstOrDefault(
+                                    pss =>
+                                        pss.Key.Equals(string.Format(PROPERTY_KEY_DESCRIPTOR_NUMBER_FORMAT,
+                                            descriptor.DescriptorID)));
+                            descriptorNumberCellValue.Text = entry.Value.ToString();
+
+                            descriptorNumberCell.Append(descriptorNumberCellValue);
+
+                            Cell descriptorDescCell = new Cell()
+                            {
+                                CellReference = string.Format("D{0}", currentRowIndex),
+                                StyleIndex = (UInt32Value) 13U,
+                                DataType = CellValues.SharedString
+                            };
+                            CellValue descriptorDescCellValue = new CellValue();
+                            entry =
+                                propertyToSharedStrings.FirstOrDefault(
+                                    pss =>
+                                        pss.Key.Equals(string.Format(PROPERTY_KEY_DESCRIPTOR_DESC_FORMAT,
+                                            descriptor.DescriptorID)));
+                            descriptorDescCellValue.Text = entry.Value.ToString();
+
+                            descriptorDescCell.Append(descriptorDescCellValue);
+
+                            descriptorRow.Append(descriptorFirstCell);
+                            descriptorRow.Append(descriptorSecondCell);
+                            descriptorRow.Append(descriptorNumberCell);
+                            descriptorRow.Append(descriptorDescCell);
+
+                            //Loop for learning activities count
+                            column = 'D';
+                            foreach (var learningActivity in programLearningActivities)
+                            {
+                                column++;
+                                Cell descriptorAssociateCell = new Cell()
+                                {
+                                    CellReference = string.Format("{0}{1}", column, currentRowIndex),
+                                    StyleIndex = (UInt32Value) 2U,
+                                    DataType = CellValues.SharedString
+                                };
+
+                                //If a competencyLearningActivity exists for this Descriptor and LearningActivity
+                                if (competencyLearningActivities.FirstOrDefault(
+                                    r => r.CompetencyItemID == descriptor.DescriptorID &&
+                                         r.CompetencyType == 3 &&
+                                         r.LearningActivityID == learningActivity.LearningActivityID) != null)
+                                {
+                                    CellValue descriptorAssociateCellValue = new CellValue();
+                                    descriptorAssociateCellValue.Text = "12";
+                                    descriptorAssociateCell.Append(descriptorAssociateCellValue);
+                                }
+                                descriptorRow.Append(descriptorAssociateCell);
+                            }
+
+                            //Add to Sheet
+                            sheetData1.Append(descriptorRow);
+                        }
                     }
-                }
+                
             }            
 
             MergeCells mergeCells = new MergeCells() { Count = (UInt32Value)(uint)mergedCells.Count };
@@ -3052,12 +3149,12 @@ namespace UCT.Models
 
         #endregion
                 
-        private void AddLearningActivityReportHeaders(SharedStringTable sharedStringTable1)
+        private void AddLearningActivityReportHeaders(SharedStringTable sharedStringTable1, string versionName)
         {
             //Add initial items with index from 0 to 8
             AddSharedString(sharedStringTable1, "TGS Learning Activities Template ");
 
-            AddSharedString(sharedStringTable1, "Version:");
+            AddSharedString(sharedStringTable1, string.Format("Version: {0}", versionName));
 
             AddSharedString(sharedStringTable1, string.Format("Program Name: {0}", this.ProgramName));
 
