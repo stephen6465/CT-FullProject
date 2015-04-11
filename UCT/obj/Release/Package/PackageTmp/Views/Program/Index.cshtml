@@ -1,4 +1,4 @@
-﻿@model IEnumerable<UCT.Models.Program>
+﻿@model UCT.ViewModels.ProgramViewModel
 
 @{
     ViewBag.Title = "Programs";
@@ -17,7 +17,7 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.programs) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Description)
@@ -39,3 +39,15 @@
 }
 
 </table>
+
+<h2>View Previous Versions</h2>
+
+@using (Html.BeginForm("Index", "Version", FormMethod.Post, new { versionID = Model.VersionID }))
+    {
+        <div style="float:left;">
+           
+            <label style="display:inline;padding-right:15px;">Select Version:</label>@Html.DropDownListFor(x => x.VersionID, new SelectList(Model.versions, "VersionID", "VersionName", Model.VersionID))
+            <input id="submit" type="submit" name="Submit" value="Apply" style="margin-left:15px;" />
+        </div>
+    }
+

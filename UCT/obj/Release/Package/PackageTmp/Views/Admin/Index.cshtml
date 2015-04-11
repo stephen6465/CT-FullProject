@@ -1,29 +1,50 @@
-﻿@model IEnumerable<UCT.Models.UserProfile>
+﻿@*@model IEnumerable<UCT.Models.UserProfile>*@
+@model UCT.ViewModels.UserProfileViewModel
 
 @{
     ViewBag.Title = "User Administration";
 }
 
-<h2>User Administration</h2>
+<h2>Create New Version</h2>
 
+@using (Html.BeginForm("Create", "Version", FormMethod.Post, new { VersionName = Model.VersionName, programID = Model.ProgramID}))
+{
+    <div style="float:left;">
+        <label style="display:inline;padding-right:15px;">Select Program:</label>@Html.DropDownListFor(x => x.ProgramID, new SelectList(Model.UserPrograms, "ProgramID", "Description", Model.ProgramID))
+        <label style="display:inline;padding-right:15px;">Version Name:</label>
+        @Html.TextBoxFor(v => v.VersionName, new { style = "display:inline;padding-right:15px;height: 10px; width: 150px;" })
+        <input id="submit" type="submit" name="Submit" value="Apply" style="margin-left:15px;" />
+    </div>
+
+}
+<br/>
+<br />
+<div>
+    <h2>User Administration</h2>
+</div>
+
+<br />
 @*<p>
     @Html.ActionLink("Create New", "Create")
 </p>*@
+
+
+
 <table>
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.UserName)
+            @Html.DisplayNameFor(model =>  Model.UserProfiles.FirstOrDefault().UserName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Email)
+            @Html.DisplayNameFor(model => Model.UserProfiles.FirstOrDefault().Email)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IsApproved)
+            @Html.DisplayNameFor(model => Model.UserProfiles.FirstOrDefault().IsApproved)
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.UserProfiles) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.UserName)

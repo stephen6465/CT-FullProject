@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="34b227d3d11f497eb143efb8a52c102b" Name="Diagram1">
+        <EntityTypeShape EntityType="UCTModel1.Descriptors_Archive" Width="1.5" PointX="8.25" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel1.LearningActivities_Archive" Width="1.5" PointX="7.75" PointY="13.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel1.Programs_Archive" Width="1.5" PointX="2.125" PointY="14" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel1.ProgramUsers_Archive" Width="1.5" PointX="5.25" PointY="14.625" IsExpanded="true" />
+        <AssociationConnector Association="UCTModel1.FK_LearningActivities_Archive_Programs" ManuallyRouted="false" />
+        <AssociationConnector Association="UCTModel1.FK_ProgramUsers_Archive_Programs" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="UCTModel1.Version" Width="1.5" PointX="0.5" PointY="10.375" />
+        <AssociationConnector Association="UCTModel1.FK_Descriptors_Archive_Version" />
+        <AssociationConnector Association="UCTModel1.FK_LearningActivities_Archive_Version" />
+        <AssociationConnector Association="UCTModel1.FK_Programs_Archive_Version" />
+        <AssociationConnector Association="UCTModel1.FK_ProgramUsers_Archive_Version" />
+        <EntityTypeShape EntityType="UCTModel1.LearningGoals_Archive" Width="1.5" PointX="10.25" PointY="13.875" />
+        <AssociationConnector Association="UCTModel1.FK_LearningGoals_Archive_Program_Archive" />
+        <AssociationConnector Association="UCTModel1.FK_LearningGoals_Archive_Version" />
+        <EntityTypeShape EntityType="UCTModel1.Competencies_Archive" Width="1.5" PointX="11" PointY="9.25" />
+        <AssociationConnector Association="UCTModel1.FK_Competencies_Archive_LearningGoals_Archive" ManuallyRouted="true" >
+          <ConnectorPoint PointX="11.375" PointY="13.875" />
+          <ConnectorPoint PointX="11.375" PointY="13.57337978515625" />
+          <ConnectorPoint PointX="11.75" PointY="13.57337978515625" />
+          <ConnectorPoint PointX="11.75" PointY="13.262619563802083" />
+          <ConnectorPoint PointX="11.375" PointY="13.262619563802083" />
+          <ConnectorPoint PointX="11.375" PointY="12.960999348958334" />
+        </AssociationConnector>
+        <AssociationConnector Association="UCTModel1.FK_Competencies_Archive_Version" />
+        <AssociationConnector Association="UCTModel1.FK_Descriptors_Archive_Competencies_Archive" />
+        <EntityTypeShape EntityType="UCTModel1.Competencies_LearningActivities_Archive" Width="1.5" PointX="5.875" PointY="9.875" />
+        <AssociationConnector Association="UCTModel1.FK_Competencies_LearningActivities_Archive_LearningActivities_Archive" />
+        <AssociationConnector Association="UCTModel1.FK_Competencies_LearningActivities_Archive_Version" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

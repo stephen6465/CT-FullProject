@@ -1,0 +1,117 @@
+﻿@model UCT.ViewModels.VersionViewModel
+
+@{
+    ViewBag.Title = "Version";
+}
+
+<h2>Version   @Model.version.VersionName</h2>
+<h2>Program   @Model.Program.Description</h2>
+
+<p>
+   @*Html.ActionLink("Create New", "Create")*@
+</p>
+
+<div style="float:right;">
+    <input type="button" value="Export" onclick="location.href='@Url.Action("Export", "Version", new { versionID = Model.version.VersionID })'" />
+</div>
+
+  @if (Model.LearningGoals.Any())
+    {
+<table id="competencyHierarchyTable">
+    <thead>
+        <tr>
+            <th colspan="4">
+                Goals, Competencies, and Descriptors &nbsp; &nbsp;
+            </th>
+            @*<th style="text-align:center;"></th>*@
+        </tr>
+    </thead>
+    
+
+    @foreach (var learningGoal in Model.LearningGoals.Where(v => v.VersionID == Model.version.VersionID  ).OrderBy(j => j.Position))
+    {
+        <tr>
+            <td class="width30">@Html.DisplayFor(modelItem => learningGoal.Position)<text>.</text> </td>
+            <td colspan="3"><b>@Html.DisplayFor(modelItem => learningGoal.Title)</b>:&nbsp;@Html.DisplayFor(modelItem => learningGoal.Description)</td>
+       </tr>
+        foreach (var competency in Model.Competencies.Where(v => v.VersionID == Model.version.VersionID).Where(c=> c.LearningGoalID == learningGoal.LearningGoalID).OrderBy(j => j.Position))
+        {
+            <tr>
+                <td class="width30">&nbsp;</td>
+                <td class="width30"> @Html.DisplayFor(modelItem => learningGoal.Position)<text>.</text>@Html.DisplayFor(modelItem => competency.Position)<text>.</text></td>
+                <td colspan="2">@Html.DisplayFor(modelItem => competency.Description)</td>
+            </tr>
+            foreach (var descriptor in competency.Descriptors_Archive.Where(v => v.VersionID == Model.version.VersionID).OrderBy(j => j.Position))
+            {
+                <tr>
+                    <td class="width30">&nbsp;</td>
+                    <td class="width30">&nbsp;</td>
+                    <td class="width30"> @Html.DisplayFor(modelItem => learningGoal.Position)<text>.</text>@Html.DisplayFor(modelItem => competency.Position)<text>.</text>@Html.DisplayFor(modelItem => descriptor.Position)</td>
+                    <td>@Html.DisplayFor(modelItem => descriptor.Description)</td>
+                </tr>
+            }
+        }
+    }
+
+</table>
+    }
+    else
+    {
+<label>There are currently no Learning Goals for this Program.</label>
+    }
+
+<br/>
+<br />
+<h2>Learning Goals</h2>
+@if (Model.LearningActivities.Where(la => la.VersionID == Model.version.VersionID).Count() > 0)
+    {
+<table>
+    <tr>
+        @*<th>
+                @Html.DisplayNameFor(model => model.LearningActivityID)
+            </th>*@
+        <th style="padding-right:10px;">
+            Number
+        </th>
+        <th>
+            Title
+        </th>
+        <th>
+            Scenario
+        </th>
+        <th>
+            Required Topics
+        </th>
+        <th>
+            Weeks
+        </th>
+        <th style="white-space:nowrap;text-align:center;">Actions</th>
+    </tr>
+
+    @foreach (var item in Model.LearningActivities.Where(la => la.VersionID == Model.version.VersionID).OrderBy(la=> la.Position))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Position)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Scenario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TopicsRequired)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Weeks)
+            </td>
+        </tr>
+    }
+</table>
+
+    }
+    else
+    {
+<label>There are currently no Learning Activities for this Programs Version.</label>
+    }

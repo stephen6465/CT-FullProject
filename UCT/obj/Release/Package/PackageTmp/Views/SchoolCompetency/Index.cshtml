@@ -28,6 +28,7 @@
 
         @foreach (var learningGoal in Model)
         {
+         
             <tr>
                 <td class="width30">@Html.DisplayFor(modelItem => learningGoal.LearningGoalNumber)</td>
                 <td colspan="3"><b>@Html.DisplayFor(modelItem => learningGoal.Title)</b>:&nbsp;@Html.DisplayFor(modelItem => learningGoal.Description)</td>

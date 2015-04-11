@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="UCTModel1StoreContainer" CdmEntityContainer="UCTEntities">
+    <EntitySetMapping Name="Descriptors_Archive">
+      <EntityTypeMapping TypeName="UCTModel1.Descriptors_Archive">
+        <MappingFragment StoreEntitySet="Descriptors_Archive">
+          <ScalarProperty Name="DescriptorID" ColumnName="DescriptorID" />
+          <ScalarProperty Name="CompetencyID" ColumnName="CompetencyID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Position" ColumnName="Position" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+          <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+          <ScalarProperty Name="LastModifiedDateTime" ColumnName="LastModifiedDateTime" />
+          <ScalarProperty Name="VersionID" ColumnName="VersionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LearningActivities_Archive">
+      <EntityTypeMapping TypeName="UCTModel1.LearningActivities_Archive">
+        <MappingFragment StoreEntitySet="LearningActivities_Archive">
+          <ScalarProperty Name="OldLearningActivityID" ColumnName="OldLearningActivityID" />
+          <ScalarProperty Name="LearningActivityID" ColumnName="LearningActivityID" />
+          <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Scenario" ColumnName="Scenario" />
+          <ScalarProperty Name="TopicsRequired" ColumnName="TopicsRequired" />
+          <ScalarProperty Name="Weeks" ColumnName="Weeks" />
+          <ScalarProperty Name="Position" ColumnName="Position" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+          <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+          <ScalarProperty Name="LastModifiedDateTime" ColumnName="LastModifiedDateTime" />
+          <ScalarProperty Name="VersionID" ColumnName="VersionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Programs_Archive">
+      <EntityTypeMapping TypeName="UCTModel1.Programs_Archive">
+        <MappingFragment StoreEntitySet="Programs_Archive">
+          <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+          <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+          <ScalarProperty Name="LastModifiedDateTime" ColumnName="LastModifiedDateTime" />
+          <ScalarProperty Name="VersionID" ColumnName="VersionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProgramUsers_Archive">
+      <EntityTypeMapping TypeName="UCTModel1.ProgramUsers_Archive">
+        <MappingFragment StoreEntitySet="ProgramUsers_Archive">
+          <ScalarProperty Name="ProgramUserID" ColumnName="ProgramUserID" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+          <ScalarProperty Name="VersionID" ColumnName="VersionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Versions">
+      <EntityTypeMapping TypeName="UCTModel1.Version">
+        <MappingFragment StoreEntitySet="Versions">
+          <ScalarProperty Name="ArchiveDate" ColumnName="ArchiveDate" />
+          <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
+          <ScalarProperty Name="VersionName" ColumnName="VersionName" />
+          <ScalarProperty Name="VersionID" ColumnName="VersionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LearningGoals_Archive">
+      <EntityTypeMapping TypeName="UCTModel1.LearningGoals_Archive">
+        <MappingFragment StoreEntitySet="LearningGoals_Archive">
+          <ScalarProperty Name="OldLearningGoalID" ColumnName="OldLearningGoalID" />
+          <ScalarProperty Name="VersionID" ColumnName="VersionID" />
+          <ScalarProperty Name="LastModifiedDateTime" ColumnName="LastModifiedDateTime" />
+          <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+          <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="Position" ColumnName="Position" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
+          <ScalarProperty Name="LearningGoalID" ColumnName="LearningGoalID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Competencies_Archive">
+      <EntityTypeMapping TypeName="UCTModel1.Competencies_Archive">
+        <MappingFragment StoreEntitySet="Competencies_Archive">
+          <ScalarProperty Name="OldCompetencyID" ColumnName="OldCompetencyID" />
+          <ScalarProperty Name="OldLearningGoalID" ColumnName="OldLearningGoalID" />
+          <ScalarProperty Name="VersionID" ColumnName="VersionID" />
+          <ScalarProperty Name="LastModifiedDateTime" ColumnName="LastModifiedDateTime" />
+          <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+          <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="Position" ColumnName="Position" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="LearningGoalID" ColumnName="LearningGoalID" />
+          <ScalarProperty Name="CompetencyID" ColumnName="CompetencyID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Competencies_LearningActivities_Archive">
+      <EntityTypeMapping TypeName="UCTModel1.Competencies_LearningActivities_Archive">
+        <MappingFragment StoreEntitySet="Competencies_LearningActivities_Archive">
+          <ScalarProperty Name="OldCompetencyItemID" ColumnName="OldCompetencyItemID" />
+          <ScalarProperty Name="OldCompetency_LearningActivityID" ColumnName="OldCompetency_LearningActivityID" />
+          <ScalarProperty Name="VersionID" ColumnName="VersionID" />
+          <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="LearningActivityID" ColumnName="LearningActivityID" />
+          <ScalarProperty Name="CompetencyType" ColumnName="CompetencyType" />
+          <ScalarProperty Name="CompetencyItemID" ColumnName="CompetencyItemID" />
+          <ScalarProperty Name="Competency_LearningActivityID" ColumnName="Competency_LearningActivityID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,331 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="UCTModel1.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Competencies_Archive">
+    <Key>
+      <PropertyRef Name="CompetencyID" />
+    </Key>
+    <Property Name="CompetencyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LearningGoalID" Type="int" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="Position" Type="smallint" Nullable="false" />
+    <Property Name="CreatedBy" Type="int" Nullable="false" />
+    <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
+    <Property Name="LastModifiedBy" Type="int" />
+    <Property Name="LastModifiedDateTime" Type="datetime" />
+    <Property Name="VersionID" Type="int" />
+    <Property Name="OldLearningGoalID" Type="int" />
+    <Property Name="OldCompetencyID" Type="int" />
+  </EntityType>
+  <EntityType Name="Competencies_LearningActivities_Archive">
+    <Key>
+      <PropertyRef Name="Competency_LearningActivityID" />
+    </Key>
+    <Property Name="Competency_LearningActivityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CompetencyItemID" Type="int" Nullable="false" />
+    <Property Name="CompetencyType" Type="tinyint" Nullable="false" />
+    <Property Name="LearningActivityID" Type="int" Nullable="false" />
+    <Property Name="CreatedBy" Type="int" Nullable="false" />
+    <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
+    <Property Name="VersionID" Type="int" />
+    <Property Name="OldCompetency_LearningActivityID" Type="int" />
+    <Property Name="OldCompetencyItemID" Type="int" />
+  </EntityType>
+  <EntityType Name="Descriptors_Archive">
+    <Key>
+      <PropertyRef Name="DescriptorID" />
+    </Key>
+    <Property Name="DescriptorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CompetencyID" Type="int" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="Position" Type="smallint" Nullable="false" />
+    <Property Name="CreatedBy" Type="int" Nullable="false" />
+    <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
+    <Property Name="LastModifiedBy" Type="int" />
+    <Property Name="LastModifiedDateTime" Type="datetime" />
+    <Property Name="VersionID" Type="int" />
+  </EntityType>
+  <EntityType Name="LearningActivities_Archive">
+    <Key>
+      <PropertyRef Name="LearningActivityID" />
+    </Key>
+    <Property Name="LearningActivityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProgramID" Type="int" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="Scenario" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="TopicsRequired" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Weeks" Type="decimal" Precision="4" Scale="2" Nullable="false" />
+    <Property Name="Position" Type="smallint" Nullable="false" />
+    <Property Name="CreatedBy" Type="int" Nullable="false" />
+    <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
+    <Property Name="LastModifiedBy" Type="int" />
+    <Property Name="LastModifiedDateTime" Type="datetime" />
+    <Property Name="VersionID" Type="int" />
+    <Property Name="OldLearningActivityID" Type="int" />
+  </EntityType>
+  <EntityType Name="LearningGoals_Archive">
+    <Key>
+      <PropertyRef Name="LearningGoalID" />
+    </Key>
+    <Property Name="LearningGoalID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProgramID" Type="int" />
+    <Property Name="Title" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="500" Nullable="false" />
+    <Property Name="Position" Type="smallint" Nullable="false" />
+    <Property Name="CreatedBy" Type="int" Nullable="false" />
+    <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
+    <Property Name="LastModifiedBy" Type="int" />
+    <Property Name="LastModifiedDateTime" Type="datetime" />
+    <Property Name="VersionID" Type="int" />
+    <Property Name="OldLearningGoalID" Type="int" />
+  </EntityType>
+  <EntityType Name="Programs_Archive">
+    <Key>
+      <PropertyRef Name="ProgramID" />
+    </Key>
+    <Property Name="ProgramID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="CreatedBy" Type="int" Nullable="false" />
+    <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
+    <Property Name="LastModifiedBy" Type="int" />
+    <Property Name="LastModifiedDateTime" Type="datetime" />
+    <Property Name="VersionID" Type="int" />
+  </EntityType>
+  <EntityType Name="ProgramUsers_Archive">
+    <Key>
+      <PropertyRef Name="ProgramUserID" />
+    </Key>
+    <Property Name="ProgramUserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="ProgramID" Type="int" Nullable="false" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="CreatedDateTime" Type="datetime" />
+    <Property Name="VersionID" Type="int" />
+  </EntityType>
+  <EntityType Name="Versions">
+    <Key>
+      <PropertyRef Name="VersionID" />
+    </Key>
+    <Property Name="VersionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VersionName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="ProgramID" Type="int" />
+    <Property Name="ArchiveDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Competencies_Archive_LearningGoals_Archive">
+    <End Role="LearningGoals_Archive" Type="Self.LearningGoals_Archive" Multiplicity="1" />
+    <End Role="Competencies_Archive" Type="Self.Competencies_Archive" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LearningGoals_Archive">
+        <PropertyRef Name="LearningGoalID" />
+      </Principal>
+      <Dependent Role="Competencies_Archive">
+        <PropertyRef Name="LearningGoalID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Competencies_Archive_Version">
+    <End Role="Versions" Type="Self.Versions" Multiplicity="0..1" />
+    <End Role="Competencies_Archive" Type="Self.Competencies_Archive" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Versions">
+        <PropertyRef Name="VersionID" />
+      </Principal>
+      <Dependent Role="Competencies_Archive">
+        <PropertyRef Name="VersionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Competencies_LearningActivities_Archive_LearningActivities_Archive">
+    <End Role="LearningActivities_Archive" Type="Self.LearningActivities_Archive" Multiplicity="1" />
+    <End Role="Competencies_LearningActivities_Archive" Type="Self.Competencies_LearningActivities_Archive" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LearningActivities_Archive">
+        <PropertyRef Name="LearningActivityID" />
+      </Principal>
+      <Dependent Role="Competencies_LearningActivities_Archive">
+        <PropertyRef Name="LearningActivityID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Competencies_LearningActivities_Archive_Version">
+    <End Role="Versions" Type="Self.Versions" Multiplicity="0..1" />
+    <End Role="Competencies_LearningActivities_Archive" Type="Self.Competencies_LearningActivities_Archive" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Versions">
+        <PropertyRef Name="VersionID" />
+      </Principal>
+      <Dependent Role="Competencies_LearningActivities_Archive">
+        <PropertyRef Name="VersionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Descriptors_Archive_Competencies_Archive">
+    <End Role="Competencies_Archive" Type="Self.Competencies_Archive" Multiplicity="1" />
+    <End Role="Descriptors_Archive" Type="Self.Descriptors_Archive" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Competencies_Archive">
+        <PropertyRef Name="CompetencyID" />
+      </Principal>
+      <Dependent Role="Descriptors_Archive">
+        <PropertyRef Name="CompetencyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Descriptors_Archive_Version">
+    <End Role="Versions" Type="Self.Versions" Multiplicity="0..1" />
+    <End Role="Descriptors_Archive" Type="Self.Descriptors_Archive" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Versions">
+        <PropertyRef Name="VersionID" />
+      </Principal>
+      <Dependent Role="Descriptors_Archive">
+        <PropertyRef Name="VersionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LearningActivities_Archive_Programs">
+    <End Role="Programs_Archive" Type="Self.Programs_Archive" Multiplicity="1" />
+    <End Role="LearningActivities_Archive" Type="Self.LearningActivities_Archive" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Programs_Archive">
+        <PropertyRef Name="ProgramID" />
+      </Principal>
+      <Dependent Role="LearningActivities_Archive">
+        <PropertyRef Name="ProgramID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LearningActivities_Archive_Version">
+    <End Role="Versions" Type="Self.Versions" Multiplicity="0..1" />
+    <End Role="LearningActivities_Archive" Type="Self.LearningActivities_Archive" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Versions">
+        <PropertyRef Name="VersionID" />
+      </Principal>
+      <Dependent Role="LearningActivities_Archive">
+        <PropertyRef Name="VersionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LearningGoals_Archive_Program_Archive">
+    <End Role="Programs_Archive" Type="Self.Programs_Archive" Multiplicity="0..1" />
+    <End Role="LearningGoals_Archive" Type="Self.LearningGoals_Archive" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Programs_Archive">
+        <PropertyRef Name="ProgramID" />
+      </Principal>
+      <Dependent Role="LearningGoals_Archive">
+        <PropertyRef Name="ProgramID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LearningGoals_Archive_Version">
+    <End Role="Versions" Type="Self.Versions" Multiplicity="0..1" />
+    <End Role="LearningGoals_Archive" Type="Self.LearningGoals_Archive" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Versions">
+        <PropertyRef Name="VersionID" />
+      </Principal>
+      <Dependent Role="LearningGoals_Archive">
+        <PropertyRef Name="VersionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Programs_Archive_Version">
+    <End Role="Versions" Type="Self.Versions" Multiplicity="0..1" />
+    <End Role="Programs_Archive" Type="Self.Programs_Archive" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Versions">
+        <PropertyRef Name="VersionID" />
+      </Principal>
+      <Dependent Role="Programs_Archive">
+        <PropertyRef Name="VersionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProgramUsers_Archive_Programs">
+    <End Role="Programs_Archive" Type="Self.Programs_Archive" Multiplicity="1" />
+    <End Role="ProgramUsers_Archive" Type="Self.ProgramUsers_Archive" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Programs_Archive">
+        <PropertyRef Name="ProgramID" />
+      </Principal>
+      <Dependent Role="ProgramUsers_Archive">
+        <PropertyRef Name="ProgramID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProgramUsers_Archive_Version">
+    <End Role="Versions" Type="Self.Versions" Multiplicity="0..1" />
+    <End Role="ProgramUsers_Archive" Type="Self.ProgramUsers_Archive" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Versions">
+        <PropertyRef Name="VersionID" />
+      </Principal>
+      <Dependent Role="ProgramUsers_Archive">
+        <PropertyRef Name="VersionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="UCTModel1StoreContainer">
+    <EntitySet Name="Competencies_Archive" EntityType="Self.Competencies_Archive" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Competencies_LearningActivities_Archive" EntityType="Self.Competencies_LearningActivities_Archive" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Descriptors_Archive" EntityType="Self.Descriptors_Archive" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LearningActivities_Archive" EntityType="Self.LearningActivities_Archive" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LearningGoals_Archive" EntityType="Self.LearningGoals_Archive" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Programs_Archive" EntityType="Self.Programs_Archive" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProgramUsers_Archive" EntityType="Self.ProgramUsers_Archive" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Versions" EntityType="Self.Versions" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Competencies_Archive_LearningGoals_Archive" Association="Self.FK_Competencies_Archive_LearningGoals_Archive">
+      <End Role="LearningGoals_Archive" EntitySet="LearningGoals_Archive" />
+      <End Role="Competencies_Archive" EntitySet="Competencies_Archive" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Competencies_Archive_Version" Association="Self.FK_Competencies_Archive_Version">
+      <End Role="Versions" EntitySet="Versions" />
+      <End Role="Competencies_Archive" EntitySet="Competencies_Archive" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Competencies_LearningActivities_Archive_LearningActivities_Archive" Association="Self.FK_Competencies_LearningActivities_Archive_LearningActivities_Archive">
+      <End Role="LearningActivities_Archive" EntitySet="LearningActivities_Archive" />
+      <End Role="Competencies_LearningActivities_Archive" EntitySet="Competencies_LearningActivities_Archive" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Competencies_LearningActivities_Archive_Version" Association="Self.FK_Competencies_LearningActivities_Archive_Version">
+      <End Role="Versions" EntitySet="Versions" />
+      <End Role="Competencies_LearningActivities_Archive" EntitySet="Competencies_LearningActivities_Archive" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Descriptors_Archive_Competencies_Archive" Association="Self.FK_Descriptors_Archive_Competencies_Archive">
+      <End Role="Competencies_Archive" EntitySet="Competencies_Archive" />
+      <End Role="Descriptors_Archive" EntitySet="Descriptors_Archive" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Descriptors_Archive_Version" Association="Self.FK_Descriptors_Archive_Version">
+      <End Role="Versions" EntitySet="Versions" />
+      <End Role="Descriptors_Archive" EntitySet="Descriptors_Archive" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LearningActivities_Archive_Programs" Association="Self.FK_LearningActivities_Archive_Programs">
+      <End Role="Programs_Archive" EntitySet="Programs_Archive" />
+      <End Role="LearningActivities_Archive" EntitySet="LearningActivities_Archive" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LearningActivities_Archive_Version" Association="Self.FK_LearningActivities_Archive_Version">
+      <End Role="Versions" EntitySet="Versions" />
+      <End Role="LearningActivities_Archive" EntitySet="LearningActivities_Archive" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LearningGoals_Archive_Program_Archive" Association="Self.FK_LearningGoals_Archive_Program_Archive">
+      <End Role="Programs_Archive" EntitySet="Programs_Archive" />
+      <End Role="LearningGoals_Archive" EntitySet="LearningGoals_Archive" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LearningGoals_Archive_Version" Association="Self.FK_LearningGoals_Archive_Version">
+      <End Role="Versions" EntitySet="Versions" />
+      <End Role="LearningGoals_Archive" EntitySet="LearningGoals_Archive" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Programs_Archive_Version" Association="Self.FK_Programs_Archive_Version">
+      <End Role="Versions" EntitySet="Versions" />
+      <End Role="Programs_Archive" EntitySet="Programs_Archive" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProgramUsers_Archive_Programs" Association="Self.FK_ProgramUsers_Archive_Programs">
+      <End Role="Programs_Archive" EntitySet="Programs_Archive" />
+      <End Role="ProgramUsers_Archive" EntitySet="ProgramUsers_Archive" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProgramUsers_Archive_Version" Association="Self.FK_ProgramUsers_Archive_Version">
+      <End Role="Versions" EntitySet="Versions" />
+      <End Role="ProgramUsers_Archive" EntitySet="ProgramUsers_Archive" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
