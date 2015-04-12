@@ -45,7 +45,7 @@ namespace UCT.Models
         IEnumerable<Competency> GetCompetencyByLearningGoal(int learningGoalID);
         IEnumerable<LearningGoals_Archive>GetLearningGoalsByVersionID(int versionID);
         int GetNewLearningID(int learningGoalID, int versionID);
-        int GetNewLearningActivityID(int learningActivityID);
+        int GetNewLearningActivityID(int learningActivityID, int versionID);
 
         int GetNewCompetencyItemID(int OldCompItemID, int versionID);
 

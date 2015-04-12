@@ -2656,9 +2656,37 @@ namespace UCT.Models
                     Cell learningGoalAssociateCell = new Cell() { CellReference = string.Format("{0}{1}", column, currentRowIndex), StyleIndex = (UInt32Value)2U, DataType = CellValues.SharedString };
 
                     //If a competencyLearningActivity exists for this Learning Goal and LearningActivity
-                    if(competencyLearningActivities.FirstOrDefault(r => r.CompetencyItemID == learningGoal.LearningGoalID && 
-                                                                        r.CompetencyType == 1 &&
-                                                                        r.LearningActivityID == learningActivity.LearningActivityID) != null)                    
+
+                    var testCompLearn =
+                        competencyLearningActivities.Where(r => r.CompetencyType == 1 && r.LearningActivityID == learningActivity.LearningActivityID).ToList();
+
+                    var compsPass = new Competencies_Archive();
+                    bool test = false;
+
+                    foreach (var testCompLearnTest in testCompLearn)
+                    {
+
+                         compsPass =
+                            compsArchives.Where(r => r.CompetencyID == testCompLearnTest.CompetencyItemID)
+                                .FirstOrDefault(r => r.LearningGoalID == learningGoal.LearningGoalID );
+
+
+                        if (compsPass != null)
+                        {
+                            test = true;
+
+                        }
+
+
+                    }
+
+                    
+
+                    //if(competencyLearningActivities.FirstOrDefault(r => r.CompetencyItemID == learningGoal.LearningGoalID && 
+                    //                                                    r.CompetencyType == 1 &&
+                    //                                                    r.LearningActivityID == learningActivity.LearningActivityID) != null)                    
+                    
+                    if (test)
                     {
                         CellValue learningGoalAssociateCellValue = new CellValue();
                         learningGoalAssociateCellValue.Text = "12";
@@ -2740,7 +2768,10 @@ namespace UCT.Models
                                 DataType = CellValues.SharedString
                             };
 
+
                             //If a competencyLearningActivity exists for this Competency and LearningActivity
+
+
                             if (competencyLearningActivities.FirstOrDefault(
                                 r => r.CompetencyItemID == competency.CompetencyID &&
                                      r.CompetencyType == 2 &&
@@ -2827,7 +2858,7 @@ namespace UCT.Models
 
                                 //If a competencyLearningActivity exists for this Descriptor and LearningActivity
                                 if (competencyLearningActivities.FirstOrDefault(
-                                    r => r.CompetencyItemID == descriptor.DescriptorID &&
+                                    r => r.CompetencyItemID == descriptor.CompetencyID &&
                                          r.CompetencyType == 3 &&
                                          r.LearningActivityID == learningActivity.LearningActivityID) != null)
                                 {

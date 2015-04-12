@@ -150,10 +150,10 @@ namespace UCT.Models
 
         }
 
-        public int GetNewLearningActivityID(int learningActivityID)
+        public int GetNewLearningActivityID(int learningActivityID, int versionID)
         {
             return
-                _uct.LearningActivities_Archive.FirstOrDefault(la => la.OldLearningActivityID == learningActivityID)
+                _uct.LearningActivities_Archive.Where(lg => lg.VersionID == versionID).FirstOrDefault(la => la.OldLearningActivityID == learningActivityID)
                     .LearningActivityID;
         }
 
@@ -338,7 +338,7 @@ namespace UCT.Models
                     arcCompLearnAct.OldCompetencyItemID = competencyLearningActivity.CompetencyItemID;
                     arcCompLearnAct.CompetencyType = (byte) competencyLearningActivity.CompetencyType;
                     arcCompLearnAct.LearningActivityID =
-                        GetNewLearningActivityID(competencyLearningActivity.LearningActivityID);
+                        GetNewLearningActivityID(competencyLearningActivity.LearningActivityID , versionID);
                     arcCompLearnAct.CreatedBy = competencyLearningActivity.CreatedBy;
                     arcCompLearnAct.CreatedDateTime = competencyLearningActivity.CreatedDateTime;
                     arcCompLearnAct.VersionID = versionID;
