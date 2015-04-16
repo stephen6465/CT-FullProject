@@ -7,8 +7,9 @@ using Version = UCT.Models.Version;
 
 namespace UCT.ViewModels
 {
-    public class CompetencyHierarchyViewModel
+    public class SchoolCompetencyViewModel
     {
+      
         public int ProgramID { get; set; }
         public IEnumerable<Program> UserPrograms { get; set; }
         public IEnumerable<LearningGoal> SchoolLearningGoals { get; set; }

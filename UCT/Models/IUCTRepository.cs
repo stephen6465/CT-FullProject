@@ -75,6 +75,7 @@ namespace UCT.Models
         string MoveDescriptor(int descriptorID, short newPosition, short direction, int userId);
         string MoveLearningActivity(int learningActivityID, short newPosition, short direction, int userId);
         string DeleteProgramAndAssociations(int programID);
+        string DeleteVersionAndAssociations(int versionID);
         string DeleteLearningGoalAndAssociations(int learningGoalID);
         string DeleteCompetencyAndAssociations(int competencyID);
         string DeleteDescriptorAndAssociations(int descriptorID);

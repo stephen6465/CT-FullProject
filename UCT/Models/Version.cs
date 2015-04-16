@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace UCT.Models
 {
     using System;
@@ -26,6 +28,8 @@ namespace UCT.Models
         }
     
         public int VersionID { get; set; }
+        [Required(AllowEmptyStrings = false)]
+        [StringLength(50, ErrorMessage = "Version name cannot be longer than 200 characters or empty." , MinimumLength = 1)]
         public string VersionName { get; set; }
         public Nullable<int> ProgramID { get; set; }
         public System.DateTime ArchiveDate { get; set; }

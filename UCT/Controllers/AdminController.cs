@@ -34,7 +34,7 @@ namespace UCT.Controllers
 
             viewModel.UserProfiles = _repository.GetUsers();
             viewModel.UserPrograms = _repository.GetAllPrograms();
-            
+            viewModel.Versions = _repository.GetAllVersions();
          
             return View("Index", viewModel);
         }
@@ -119,6 +119,16 @@ namespace UCT.Controllers
             return View(userprofile);
         }
 
+       // Get: /Admin/DeleteVersion/5
+        public ActionResult DeleteVersion(int versionID)
+        {
+            string message = _repository.DeleteVersionAndAssociations(versionID);
+
+            if (message == "VersionNotFound")
+                return HttpNotFound();
+
+            return RedirectToAction("Index");
+        }
         //
         // POST: /Admin/Delete/5
 

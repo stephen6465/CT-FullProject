@@ -4,6 +4,19 @@
     ViewBag.Title = "Competencies";
 }
 @Styles.Render("~/Content/themes/base/css")
+
+<h2>View Previous Versions</h2>
+
+@using (Html.BeginForm("Index", "Version", FormMethod.Post, new { versionID = Model.VersionID }))
+{
+    <div style="float:left;">
+
+        <label style="display:inline;padding-right:15px;">Select Version:</label>@Html.DropDownListFor(x => x.VersionID, new SelectList(Model.versions, "VersionID", "VersionName", Model.VersionID))
+        <input id="submit" type="submit" name="Submit" value="Apply" style="margin-left:15px;" />
+    </div>
+}
+<br/>
+<br/>
 <h2>Competencies</h2>
 @if (Model.UserPrograms.Count() > 0)
 {

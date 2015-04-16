@@ -269,6 +269,7 @@
     </Compile>
     <Compile Include="Models\WordReportGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\SchoolCompetencyViewModel.cs" />
     <Compile Include="ViewModels\CompetencyLearningActivitiesViewModel.cs" />
     <Compile Include="ViewModels\CreateSchoolDescriptorFormViewModel.cs" />
     <Compile Include="ViewModels\CreateSchoolCompetencyFormViewModel.cs" />

@@ -2622,7 +2622,7 @@ namespace UCT.Models
             uint currentRowIndex = 5;
             KeyValuePair<string, int> entry;
             
-            foreach (var learningGoal in learningGoals)
+            foreach (var learningGoal in learningGoals.OrderBy(p=> p.Position))
             {
                 currentRowIndex++;
                 Row learningGoalRow = new Row() { RowIndex = (UInt32Value)currentRowIndex, Spans = new ListValue<StringValue>() { InnerText = string.Concat("1:", columnCount) } };

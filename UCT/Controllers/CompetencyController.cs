@@ -37,7 +37,14 @@ namespace UCT.Controllers
             int userId = default(int);
 
             viewModel.ProgramID = programID.HasValue ? programID.Value : default(int);
-            
+
+
+
+            viewModel.programs = _repository.GetAllPrograms().ToList();
+            viewModel.versions = _repository.GetAllVersions().ToList();
+
+
+
             if (_user.IsInRole("SuperUser"))
             {
                 viewModel.UserPrograms = _repository.GetAllPrograms().OrderBy(p => p.Description);

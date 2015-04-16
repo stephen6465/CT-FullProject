@@ -1100,6 +1100,136 @@ namespace UCT.Models
             return message;
         }
 
+
+        public string DeleteVersionAndAssociations(int versionID)
+        {
+            string message = string.Empty;
+
+            try
+            {
+                Version version = this.GetVersionByID(versionID);
+
+                if (version == null)
+                    return "VersionNotFound";
+
+              IEnumerable<LearningGoals_Archive> programLearningGoals = this.GetArchiveLearningGoalsByVersion(versionID);
+
+                //Delete all related items in system starting from a associations                
+                foreach (var learningGoal in programLearningGoals)
+                {
+                    //Select all Relations of this LearningGoal to any Learning Activities
+                  List<Competencies_LearningActivities_Archive> learningActivityAllocations = this.GetArchiveCompetencyLearningActivitiesByVersion(versionID).Where(cla => cla.CompetencyType == 1 && cla.CompetencyItemID == learningGoal.LearningGoalID).ToList();
+                    //   List<CompetencyLearningActivity> learningActivityAllocations = _db.CompetencyLearningActivities.Where(cla => cla.CompetencyType == CompetencyType.LearningGoal && cla.CompetencyItemID == learningGoal.LearningGoalID).ToList();
+
+                    //Remove all
+                    learningActivityAllocations.ForEach(cla =>_uct.Competencies_LearningActivities_Archive.Remove(cla));
+
+                    //Get a List Instance of this Learning Goal's Competencies
+                    //List<Competency> learningGoalCompetencies = learningGoal.Competencies.ToList();
+                   List<Competencies_Archive> learningGoalCompetencies =
+                        this.GetArchiveCompetenciesByVersion(versionID).ToList();
+
+
+                    //Remove all Relations of child Competencies to any Learning Activities
+                    foreach (var learningGoalCompetency in learningGoalCompetencies)
+                    {
+                        //Select all Relations of this Competency to any Learning Activities
+                       // learningActivityAllocations = _db.CompetencyLearningActivities.Where(cla => cla.CompetencyType == CompetencyType.Competency && cla.CompetencyItemID == learningGoalCompetency.CompetencyID).ToList();
+                        learningActivityAllocations =
+                            this.GetArchiveCompetencyLearningActivitiesByVersion(versionID)
+                                .Where(
+                                    cla =>
+                                        cla.CompetencyType == 2 &&
+                                        cla.CompetencyItemID == learningGoalCompetency.CompetencyID)
+                                .ToList();
+                        //Remove all
+                        learningActivityAllocations.ForEach(cla =>_uct.Competencies_LearningActivities_Archive.Remove(cla));
+                        var descriptors =
+                            GetArcDescriptorsByVersionID(versionID)
+                                .Where(c => c.CompetencyID == learningGoalCompetency.CompetencyID);
+                        //Remove all Relations of child Descrioptors to any Learning Activities
+                        foreach (var competencyDescriptor in descriptors)
+                        {
+                            //Select all Relations of this Descriptor
+                            learningActivityAllocations = _uct.Competencies_LearningActivities_Archive.Where(cla => cla.CompetencyType == 3 && cla.CompetencyItemID == competencyDescriptor.DescriptorID).ToList();
+
+                            //Remove all
+                            learningActivityAllocations.ForEach(cla => _uct.Competencies_LearningActivities_Archive.Remove(cla));
+                        }
+
+
+
+                    }
+
+                    foreach (var learningGoalCompetency in learningGoalCompetencies)
+                    {
+
+
+                        //Remove all Sub-Child Competencies
+                        var descriptors2 =
+                            GetArcDescriptorsByVersionID(versionID)
+                                .Where(c => c.CompetencyID == learningGoalCompetency.CompetencyID);
+                        foreach (var descriptorsArchive in descriptors2)
+                        {
+                            _uct.Descriptors_Archive.Remove(descriptorsArchive);
+                        }
+
+                        // learningGoalCompetencies.ForEach(c => c.Descriptors.ToList().ForEach(d => _db.Descriptors.Remove(d)));
+
+                        //Remove all Competencies
+                        //learningGoalCompetency.ForEach(c => _db.Competencies.Remove(c));
+
+                        _uct.Competencies_Archive.Remove(learningGoalCompetency);
+                    }
+                }
+
+
+                var program = GetArcProgramByVersionID(versionID);
+
+                //Remove all Learning Goals
+               // programLearningGoals.ForEach(lg => _db.LearningGoals.Remove(lg));
+                
+                foreach (var learningGoalsArchive in programLearningGoals)
+                {
+                    _uct.LearningGoals_Archive.Remove(learningGoalsArchive);
+                }
+
+                var learningActivitiesArc = GetArchiveLearningActivitiesByVersion(versionID);
+                //Remove all Learning Activities
+                //program.LearningActivities.ToList().ForEach(la => _db.LearningActivities.Remove(la));
+                foreach ( var learnArch in learningActivitiesArc )
+                {
+                    _uct.LearningActivities_Archive.Remove(learnArch);
+                }
+                
+                
+                //Remove all Program Users
+                //program.ProgramUsers.ToList().ForEach(pu => _db.ProgramUsers.Remove(pu));
+
+                var programUsers = GetArchiveProgramUsersByVersion(versionID);
+                foreach (var programUsersArchive in programUsers)
+                {
+                    _uct.ProgramUsers_Archive.Remove(programUsersArchive);
+                }
+
+                //Remove Program
+                _uct.Programs_Archive.Remove(program);
+
+                //Remove Version
+
+                _uct.Versions.Remove(version);
+                //Save all changes
+                _uct.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+            }
+
+            return message;
+        }
+
+
         public string DeleteLearningGoalAndAssociations(int learningGoalID)
         {
             string message = string.Empty;

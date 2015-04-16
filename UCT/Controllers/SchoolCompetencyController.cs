@@ -30,9 +30,17 @@ namespace UCT.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            IEnumerable<LearningGoal> learningGoals = _repository.GetSchoolLearningGoals().OrderBy(g => g.Position);
 
-            return View("Index", learningGoals);
+           var  viewModel = new SchoolCompetencyViewModel();
+            int userId = default(int);
+
+            viewModel.programs = _repository.GetAllPrograms().ToList();
+            viewModel.versions = _repository.GetAllVersions().ToList();
+
+
+            viewModel.LearningGoals = _repository.GetSchoolLearningGoals().OrderBy(g => g.Position);
+
+            return View("Index", viewModel);
         }
                         
         public JsonResult LoadCreateLearningGoal()

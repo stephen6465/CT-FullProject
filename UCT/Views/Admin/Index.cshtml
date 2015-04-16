@@ -8,7 +8,7 @@
 <h2>Create New Version</h2>
 
 @using (Html.BeginForm("Create", "Version", FormMethod.Post, new { VersionName = Model.VersionName, programID = Model.ProgramID}))
-{
+{  @Html.ValidationMessageFor(model => Model.VersionName)
     <div style="float:left;">
         <label style="display:inline;padding-right:15px;">Select Program:</label>@Html.DropDownListFor(x => x.ProgramID, new SelectList(Model.UserPrograms, "ProgramID", "Description", Model.ProgramID))
         <label style="display:inline;padding-right:15px;">Version Name:</label>
@@ -19,6 +19,21 @@
 }
 <br/>
 <br />
+
+<h2>Delete Version</h2>
+
+
+@using (Html.BeginForm("DeleteVersion", "Admin", FormMethod.Get, new { id = Model.VersionID }))
+{
+    <div style="float:left;">
+
+        <label style="display:inline;padding-right:15px;">Select Version:</label>@Html.DropDownListFor(x => x.VersionID, new SelectList(Model.Versions, "VersionID", "VersionName", Model.VersionID))
+        <input id="submit" type="submit" name="Submit" value="Delete" style="margin-left:15px;" />
+    </div>
+}
+<br />
+<br />
+
 <div>
     <h2>User Administration</h2>
 </div>
