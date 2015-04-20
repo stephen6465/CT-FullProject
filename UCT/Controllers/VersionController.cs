@@ -96,7 +96,7 @@ namespace UCT.Controllers
             viewModel.NewProgramID = _repository.GetArcProgramByVersionID(version.VersionID).ProgramID;
             viewModel.Program = _repository.GetArcProgramByVersionID(version.VersionID);
             
-            ExcelArcReportGenerator generator = new ExcelArcReportGenerator(viewModel.Program.Description, userProfile.UserName);
+            ExcelArcReportGenerator generator = new ExcelArcReportGenerator(viewModel.Program.Description, userProfile.UserName, version.VersionName);
 
 
             //Program program = _repository.GetProgramByID(programID);
@@ -114,7 +114,7 @@ namespace UCT.Controllers
 
             //Change these to list and pass to the method
 
-            byte[] reportBytes = generator.GenerateCompetencyLearningActivitiesReport(viewModel.LearningGoals.OrderBy(v => v.Position).ToList(), viewModel.LearningActivities.OrderBy(v => v.Position).ToList(), viewModel.CompetencyLearningActivities.ToList(), viewModel.Competencies.OrderBy(v => v.Position).ToList(), viewModel.Descriptors.OrderBy(v => v.Position).ToList());
+            byte[] reportBytes = generator.GenerateCompetencyLearningActivitiesReport(viewModel.LearningGoals.OrderBy(v => v.Position).ToList(), viewModel.LearningActivities.OrderBy(v => v.Position).ToList(), viewModel.CompetencyLearningActivities.ToList(), viewModel.Competencies.OrderBy(v => v.Position).ToList(), viewModel.Descriptors.OrderBy(v => v.Position).ToList(), version.VersionName);
 
             DateTime currentTimestamp = DateTime.Now;
             var cd = new System.Net.Mime.ContentDisposition

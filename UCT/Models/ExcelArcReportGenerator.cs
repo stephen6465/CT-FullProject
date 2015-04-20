@@ -30,10 +30,11 @@ namespace UCT.Models
 
         public string ProgramName { get; private set; }
         public string GeneratorUsername { get; private set; }
-
-        public ExcelArcReportGenerator(string programName, string generatorUserName)
+        public string versionName { get; set; }   
+        public ExcelArcReportGenerator(string programName, string generatorUserName, string versionName)
         {
             this.ProgramName = programName;
+            this.versionName = versionName;
             this.GeneratorUsername = generatorUserName;
         }
 
@@ -55,14 +56,14 @@ namespace UCT.Models
         }
 
         // Creates an Document instance and adds its children.
-        public byte[] GenerateCompetencyLearningActivitiesReport(List<LearningGoals_Archive> learningGoals, List<LearningActivities_Archive> programLearningActivities, List<Competencies_LearningActivities_Archive> competencyLearningActivities, List<Competencies_Archive> compsArchives, List<Descriptors_Archive> descriptorsArchives)
+        public byte[] GenerateCompetencyLearningActivitiesReport(List<LearningGoals_Archive> learningGoals, List<LearningActivities_Archive> programLearningActivities, List<Competencies_LearningActivities_Archive> competencyLearningActivities, List<Competencies_Archive> compsArchives, List<Descriptors_Archive> descriptorsArchives, string versionName)
         {
             byte[] reportBytes = null;
             using (MemoryStream stream = new MemoryStream())
             {
                 using (SpreadsheetDocument package = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook))
                 {
-                    CreateCompetencyLearningActivityReportParts(package, learningGoals, programLearningActivities, competencyLearningActivities, compsArchives , descriptorsArchives);
+                    CreateCompetencyLearningActivityReportParts(package, learningGoals, programLearningActivities, competencyLearningActivities, compsArchives , descriptorsArchives, versionName);
                 }
 
                 reportBytes = stream.ToArray();
@@ -522,7 +523,7 @@ namespace UCT.Models
         {
             SharedStringTable sharedStringTable1 = new SharedStringTable() { Count = (UInt32Value)53U, UniqueCount = (UInt32Value)41U };
 
-            AddLearningActivityReportHeaders(sharedStringTable1, string.Empty);
+            AddLearningActivityReportHeaders(sharedStringTable1);
 
             AddLearningActivitiesUniqueStrings(sharedStringTable1, programLearningActivities);
 
@@ -1386,7 +1387,7 @@ namespace UCT.Models
         #region CompetencyLearningActivities Report
 
         // Adds child parts and generates content of the specified part.
-        private void CreateCompetencyLearningActivityReportParts(SpreadsheetDocument document, List<LearningGoals_Archive> learningGoals, List<LearningActivities_Archive> programLearningActivities, List<Competencies_LearningActivities_Archive> competencyLearningActivities, List<Competencies_Archive> compsArchives, List<Descriptors_Archive> descriptorsArchives)
+        private void CreateCompetencyLearningActivityReportParts(SpreadsheetDocument document, List<LearningGoals_Archive> learningGoals, List<LearningActivities_Archive> programLearningActivities, List<Competencies_LearningActivities_Archive> competencyLearningActivities, List<Competencies_Archive> compsArchives, List<Descriptors_Archive> descriptorsArchives, string versionName)
         {
             WorkbookPart workbookPart1 = document.AddWorkbookPart();
             GenerateCompetencyLearningActivityWorkbookPart1Content(workbookPart1);
@@ -1398,7 +1399,7 @@ namespace UCT.Models
             GenerateCompetencyLearningActivityWorkbookStylesPart1Content(workbookStylesPart1);
 
             SharedStringTablePart sharedStringTablePart1 = workbookPart1.AddNewPart<SharedStringTablePart>("rId5");
-            GenerateCompetencyLearningActivitySharedStringTablePart1Content(sharedStringTablePart1, learningGoals, programLearningActivities, compsArchives, descriptorsArchives );
+            GenerateCompetencyLearningActivitySharedStringTablePart1Content(sharedStringTablePart1, learningGoals, programLearningActivities, compsArchives, descriptorsArchives, versionName );
 
             WorksheetPart worksheetPart1 = workbookPart1.AddNewPart<WorksheetPart>("rId1");
             GenerateCompetencyLearningActivityWorksheetPart1Content(worksheetPart1, learningGoals, programLearningActivities, competencyLearningActivities, compsArchives, descriptorsArchives);
@@ -2421,12 +2422,12 @@ namespace UCT.Models
         }
 
         // Generates content of sharedStringTablePart1.
-        private void GenerateCompetencyLearningActivitySharedStringTablePart1Content(SharedStringTablePart sharedStringTablePart1, List<LearningGoals_Archive> learningGoals, List<LearningActivities_Archive> programLearningActivities, List<Competencies_Archive> compsArchives, List<Descriptors_Archive> descriptorsArchives)
+        private void GenerateCompetencyLearningActivitySharedStringTablePart1Content(SharedStringTablePart sharedStringTablePart1, List<LearningGoals_Archive> learningGoals, List<LearningActivities_Archive> programLearningActivities, List<Competencies_Archive> compsArchives, List<Descriptors_Archive> descriptorsArchives, string versionName)
         {
             SharedStringTable sharedStringTable1 = new SharedStringTable() { Count = (UInt32Value)404U, UniqueCount = (UInt32Value)391U };
             
             //Learning Activities Report Fixed Strings
-            AddLearningActivityReportHeaders(sharedStringTable1, string.Empty );
+            AddLearningActivityReportHeaders(sharedStringTable1 );
             
             //CompetencyLearningActivities Report Fixed Strings
             AddCompetencyLearningActivitiesReportHeaders(sharedStringTable1);
@@ -3180,16 +3181,16 @@ namespace UCT.Models
 
         #endregion
                 
-        private void AddLearningActivityReportHeaders(SharedStringTable sharedStringTable1, string versionName)
+        private void AddLearningActivityReportHeaders(SharedStringTable sharedStringTable1)
         {
             //Add initial items with index from 0 to 8
             AddSharedString(sharedStringTable1, "TGS Learning Activities Template ");
 
-            AddSharedString(sharedStringTable1, string.Format("Version: {0}", versionName));
+            AddSharedString(sharedStringTable1, string.Format("Version: {0}", this.versionName));
 
             AddSharedString(sharedStringTable1, string.Format("Program Name: {0}", this.ProgramName));
 
-            AddSharedString(sharedStringTable1, string.Format("Submitter: {0}", this.GeneratorUsername));
+            AddSharedString(sharedStringTable1, string.Format("Submitter: {0} - Date {1}", this.GeneratorUsername, System.DateTime.Now.Date));
 
             AddSharedString(sharedStringTable1, "LA #");
 
@@ -3209,7 +3210,7 @@ namespace UCT.Models
 
             AddSharedString(sharedStringTable1, "Goal / Competency / Descriptor");
 
-            AddSharedString(sharedStringTable1, "Learning Activities");
+            AddSharedString(sharedStringTable1, string.Format( "Learning Activities") );
 
             AddSharedString(sharedStringTable1, "X");
         }
